@@ -476,4 +476,7 @@ def admin_reply_complaint(complaint_id):
     return redirect(url_for('admin_complaints'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Берем порт из переменной окружения PORT, или используем 5000 по умолчанию
+    port = int(os.environ.get('PORT', 5000))
+    # Запускаем сервер на всех интерфейсах (0.0.0.0) и нужном порту
+    app.run(host='0.0.0.0', port=port, debug=True)
