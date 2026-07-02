@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block title %}{{ offer.name }}{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('index') }}" class="btn btn-outline-secondary mb-3">← Назад к каталогу</a>
+
+<div class="row">
+  <div class="col-md-6">
+    <img src="{{ offer.image }}" class="img-fluid rounded shadow" alt="{{ offer.name }}">
+  </div>
+  <div class="col-md-6">
+    <h1>{{ offer.name }}</h1>
+    <p class="text-muted">{{ offer.category }}</p>
+    <div class="mb-3">
+      {% if offer.original_price %}
+      <span class="text-decoration-line-through text-muted me-2 fs-5">{{ offer.original_price }} ₽</span>
+      {% endif %}
+      <span class="fs-2 fw-bold text-danger">{{ offer.price }} ₽</span>
+    </div>
+    <p class="lead">{{ offer.desc }}</p>
+    <hr>
+    <h5>Подробное описание</h5>
+    <p>{{ offer.details }}</p>
+    <button class="btn btn-success btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#buyModal"
+            data-product="{{ offer.name }}" data-price="{{ offer.price }}"
+            data-image="{{ offer.image }}" data-category="{{ offer.category }}"
+            data-product-id="{{ offer.id }}">
+      Купить
+    </button>
+    <button class="btn btn-outline-warning mt-2" data-bs-toggle="modal" data-bs-target="#complainModal">
+      Пожаловаться
+    </button>
+  </div>
+</div>
+
+<!-- Модальное окно покупки (скопировано из index.html, но с уникальным id) -->
+<div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buyModalLabel">Оформление заказа</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <img id="modalProductImage" src="" class="img-fluid rounded" style="max-height: 200px;" alt="">
+          <h5 id="modalProductName" class="mt-2"></h5>
+          <p class="text-muted" id="modalProductCategory"></p>
+          <h4 class="text-success" id="modalProductPrice"></h4>
+        </div>
+        <hr>
+        <div class="mb-3">
+          <label class="form-label">Способ оплаты</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" value="card" checked>
+            <label class="form-check-label" for="paymentCard">Банковская карта</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="paymentSBP" value="sbp">
+            <label class="form-check-label" for="paymentSBP">СБП (QR-код)</label>
+          </div>
+        </div>
+        <div id="cardFields">
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">Номер карты</label>
+            <input type="text" class="form-control" id="cardNumber" placeholder="0000 0000 0000 0000">
+          </div>
+          <div class="row g-2">
+            <div class="col-6">
+              <label for="cardExpiry" class="form-label">Срок</label>
+              <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY">
+            </div>
+            <div class="col-6">
+              <label for="cardCvv" class="form-label">CVV</label>
+              <input type="text" class="form-control" id="cardCvv" placeholder="123">
+            </div>
+          </div>
+        </div>
+        <div id="sbpFields" style="display: none;" class="text-center">
+          <p>Отсканируйте QR-код в приложении вашего банка</p>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Rickrolling_QR_code.png" alt="QR-код" class="img-fluid border">
+          <p class="text-muted small mt-2">Или подтвердите платёж в приложении</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-success" id="payButton">Оплатить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно жалобы -->
+<div class="modal fade" id="complainModal" tabindex="-1" aria-labelledby="complainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="complainModalLabel">Жалоба на товар</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" action="{{ url_for('complain', product_id=offer.id) }}">
+        <div class="modal-body">
+          <textarea class="form-control" name="complaint_text" rows="4" placeholder="Опишите проблему" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Отправить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Переключение способов оплаты
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.getElementById('cardFields').style.display = this.value === 'card' ? 'block' : 'none';
+      document.getElementById('sbpFields').style.display = this.value === 'sbp' ? 'block' : 'none';
+    });
+  });
+
+  var buyModal = document.getElementById('buyModal');
+  buyModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    buyModal._relatedTarget = button;
+    document.getElementById('modalProductName').textContent = button.getAttribute('data-product');
+    document.getElementById('modalProductPrice').textContent = button.getAttribute('data-price') + ' ₽';
+    document.getElementById('modalProductImage').src = button.getAttribute('data-image');
+    document.getElementById('modalProductCategory').textContent = button.getAttribute('data-category');
+    document.getElementById('paymentCard').checked = true;
+    document.getElementById('cardFields').style.display = 'block';
+    document.getElementById('sbpFields').style.display = 'none';
+    document.getElementById('cardNumber').value = '';
+    document.getElementById('cardExpiry').value = '';
+    document.getElementById('cardCvv').value = '';
+  });
+
+  document.getElementById('payButton').addEventListener('click', function() {
+    const button = buyModal._relatedTarget;
+    if (!button) return;
+    const productId = button.getAttribute('data-product-id');
+    fetch(`/buy/${productId}`, { method: 'POST' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Заказ оформлен! Спасибо за покупку.');
+          const modal = bootstrap.Modal.getInstance(buyModal);
+          modal.hide();
+        } else {
+          alert('Ошибка: ' + data.message);
+        }
+      })
+      .catch(() => alert('Ошибка соединения'));
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Редактирование пользователя{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary mb-3">← Назад</a>
+<h2>Редактирование {{ user.username }}</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Логин</label>
+    <input type="text" class="form-control" name="username" value="{{ user.username }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Роль</label>
+    <select class="form-select" name="role">
+      <option value="user" {% if user.role == 'user' %}selected{% endif %}>Пользователь</option>
+      <option value="subadmin" {% if user.role == 'subadmin' %}selected{% endif %}>Суб-админ</option>
+      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Администратор</option>
+    </select>
+  </div>
+  <h5>История покупок</h5>
+  {% if user.purchases %}
+  <ul>
+    {% for p in user.purchases %}
+    <li>{{ p.product_name }} — {{ p.price }} ₽ ({{ p.date }})</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Покупок пока нет.</p>
+  {% endif %}
+  <button type="submit" class="btn btn-success">Сохранить</button>
+</form>
+{% endblock %}

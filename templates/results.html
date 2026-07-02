@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Результаты{% endblock %}
+{% block content %}
+    <h1 class="mb-3">🎯 Что можно купить на {{ budget }} ₽</h1>
+    <p>
+        Категории:
+        <strong>
+            {% if selected_categories %}
+                {{ selected_categories | join(', ') }}
+            {% else %}
+                Все
+            {% endif %}
+        </strong>
+    </p>
+    <p>
+        Сортировка:
+        <strong>
+            {% if sort_option == 'price_asc' %}По возрастанию цены
+            {% elif sort_option == 'price_desc' %}По убыванию цены
+            {% elif sort_option == 'name_asc' %}По названию (А → Я)
+            {% elif sort_option == 'name_desc' %}По названию (Я → А)
+            {% endif %}
+        </strong>
+    </p>
+    <a href="/" class="btn btn-outline-primary mb-4">← Новый поиск</a>
+
+    {% if offers %}
+        <div class="row">
+            {% for offer in offers %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ offer.name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ offer.category }} · {{ offer.price }} ₽</h6>
+                        <p class="card-text">{{ offer.desc }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            На эту сумму ничего не найдено в выбранных категориях. Попробуйте увеличить бюджет или расширить список категорий.
+        </div>
+    {% endif %}
+{% endblock %}

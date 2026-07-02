@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Редактировать товар{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin_products') }}" class="btn btn-outline-secondary mb-3">← Назад</a>
+<h2>Редактирование «{{ product.name }}»</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Название</label>
+    <input type="text" class="form-control" name="name" value="{{ product.name }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Категория</label>
+    <select class="form-select" name="category">
+      {% for cat in categories %}
+      <option value="{{ cat }}" {% if product.category == cat %}selected{% endif %}>{{ cat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Цена</label>
+    <input type="number" class="form-control" name="price" value="{{ product.price }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Старая цена (необязательно)</label>
+    <input type="number" class="form-control" name="original_price" value="{{ product.original_price if product.original_price else '' }}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Краткое описание</label>
+    <textarea class="form-control" name="desc" rows="2" required>{{ product.desc }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Подробное описание</label>
+    <textarea class="form-control" name="details" rows="3" required>{{ product.details }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">URL изображения</label>
+    <input type="text" class="form-control" name="image" value="{{ product.image }}">
+  </div>
+  <button type="submit" class="btn btn-success">Сохранить</button>
+</form>
+{% endblock %}

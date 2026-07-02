@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель{% endblock %}
+{% block content %}
+<h1>Панель управления</h1>
+<div class="list-group mt-4">
+  {% if current_user.role == 'admin' %}
+  <a href="{{ url_for('admin_users') }}" class="list-group-item list-group-item-action">👥 Управление пользователями</a>
+  {% endif %}
+  <a href="{{ url_for('admin_products') }}" class="list-group-item list-group-item-action">📦 Управление товарами</a>
+  <a href="{{ url_for('admin_complaints') }}" class="list-group-item list-group-item-action">📩 Жалобы</a>
+</div>
+{% endblock %}

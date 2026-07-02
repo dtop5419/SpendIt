@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+
+<!-- Заголовок и строка поиска -->
+<div class="text-center mb-3">
+  <h1>Куда потратить деньги</h1>
+</div>
+
+<form method="get" action="/" id="filterForm">
+  <div class="row justify-content-center mb-3">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input type="number" class="form-control" id="budget" name="budget"
+               placeholder="Введите сумму" value="{{ budget }}" min="0">
+        <button class="btn btn-primary" type="submit">Показать</button>
+      </div>
+      <small class="text-muted">Оставьте пустым, чтобы увидеть все предложения</small>
+    </div>
+  </div>
+
+  <div class="row g-0">
+    <!-- ЛЕВАЯ КОЛОНКА – КАТЕГОРИИ -->
+    <div class="col-md-2 ps-2 pe-1">
+      <div class="card shadow-sm" style="margin-left: -0.75rem;">
+        <div class="card-header">
+          <strong>Категории</strong>
+        </div>
+        <div class="card-body" style="max-height: 400px; overflow-y: auto; padding: 0.75rem;">
+          {% for cat in categories %}
+          <div class="form-check">
+            <input class="form-check-input category-checkbox" type="checkbox" name="category"
+                   value="{{ cat }}" id="cat_{{ loop.index }}"
+                   {% if cat in selected_categories %}checked{% endif %}>
+            <label class="form-check-label" for="cat_{{ loop.index }}">{{ cat }}</label>
+          </div>
+          {% endfor %}
+          <small class="text-muted">Если ничего не выбрано – все категории</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА – ТОВАРЫ -->
+    <div class="col-md-8 px-2">
+      {% if personalized and rec_budget %}
+      <div class="alert alert-success py-2 mb-3">
+        🔥 Персональные рекомендации под ваш бюджет (~{{ rec_budget }} ₽) и интересы
+      </div>
+      {% endif %}
+
+      {% if offers %}
+      <div class="row g-2">
+        {% for offer in offers %}
+        <div class="col-lg-4 col-md-6 mb-2">
+          <div class="card h-100 shadow-sm product-card" onclick="location.href='/product/{{ offer.id }}'" style="cursor: pointer;">
+            <img src="{{ offer.image }}" class="card-img-top" alt="{{ offer.name }}" style="height: 200px; object-fit: cover;">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">{{ offer.name }}</h5>
+              <p class="card-text text-muted small mb-1">{{ offer.category }}</p>
+              <div class="mb-2">
+                {% if offer.original_price %}
+                <span class="text-decoration-line-through text-muted me-2">{{ offer.original_price }} ₽</span>
+                {% endif %}
+                <span class="fs-4 fw-bold text-danger">{{ offer.price }} ₽</span>
+              </div>
+              <p class="card-text flex-grow-1">{{ offer.desc }}</p>
+              <button class="btn btn-success mt-auto" data-bs-toggle="modal" data-bs-target="#buyModal"
+                      data-product="{{ offer.name }}" data-price="{{ offer.price }}"
+                      data-image="{{ offer.image }}" data-category="{{ offer.category }}"
+                      data-product-id="{{ offer.id }}"
+                      onclick="event.stopPropagation();">
+                Купить
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-info text-center">
+        Ничего не найдено. Измените фильтры или увеличьте бюджет.
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ПРАВАЯ КОЛОНКА – СОРТИРОВКА -->
+    <div class="col-md-2 pe-2 ps-1">
+      <div class="card shadow-sm" style="margin-right: -0.75rem;">
+        <div class="card-header">
+          <strong>Сортировка</strong>
+        </div>
+        <div class="card-body" style="padding: 0.75rem;">
+          <select class="form-select" id="sort" name="sort">
+            <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Цена ↑</option>
+            <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Цена ↓</option>
+            <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название А→Я</option>
+            <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название Я→А</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Модальное окно покупки -->
+<div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="buyModalLabel">Оформление заказа</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <img id="modalProductImage" src="" class="img-fluid rounded" style="max-height: 200px;" alt="">
+          <h5 id="modalProductName" class="mt-2"></h5>
+          <p class="text-muted" id="modalProductCategory"></p>
+          <h4 class="text-success" id="modalProductPrice"></h4>
+        </div>
+        <hr>
+        <div class="mb-3">
+          <label class="form-label">Способ оплаты</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" value="card" checked>
+            <label class="form-check-label" for="paymentCard">Банковская карта</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="paymentSBP" value="sbp">
+            <label class="form-check-label" for="paymentSBP">СБП (QR-код)</label>
+          </div>
+        </div>
+        <div id="cardFields">
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">Номер карты</label>
+            <input type="text" class="form-control" id="cardNumber" placeholder="0000 0000 0000 0000">
+          </div>
+          <div class="row g-2">
+            <div class="col-6">
+              <label for="cardExpiry" class="form-label">Срок</label>
+              <input type="text" class="form-control" id="cardExpiry" placeholder="MM/YY">
+            </div>
+            <div class="col-6">
+              <label for="cardCvv" class="form-label">CVV</label>
+              <input type="text" class="form-control" id="cardCvv" placeholder="123">
+            </div>
+          </div>
+        </div>
+        <div id="sbpFields" style="display: none;" class="text-center">
+          <p>Отсканируйте QR-код в приложении вашего банка</p>
+          <img src="https://via.placeholder.com/150x150?text=QR" alt="QR-код" class="img-fluid border">
+          <p class="text-muted small mt-2">Или подтвердите платёж в приложении</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-success" id="payButton">Оплатить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Фильтры
+  document.querySelectorAll('.category-checkbox').forEach(cb => {
+    cb.addEventListener('change', () => document.getElementById('filterForm').submit());
+  });
+  document.getElementById('sort').addEventListener('change', () => {
+    document.getElementById('filterForm').submit();
+  });
+
+  // Переключение способов оплаты
+  document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      document.getElementById('cardFields').style.display = this.value === 'card' ? 'block' : 'none';
+      document.getElementById('sbpFields').style.display = this.value === 'sbp' ? 'block' : 'none';
+    });
+  });
+
+  // Модальное окно покупки – заполнение при открытии
+  var buyModal = document.getElementById('buyModal');
+  buyModal.addEventListener('show.bs.modal', function (event) {
+    var button = event.relatedTarget;
+    buyModal._relatedTarget = button;
+    document.getElementById('modalProductName').textContent = button.getAttribute('data-product');
+    document.getElementById('modalProductPrice').textContent = button.getAttribute('data-price') + ' ₽';
+    document.getElementById('modalProductImage').src = button.getAttribute('data-image');
+    document.getElementById('modalProductCategory').textContent = button.getAttribute('data-category');
+    // Сброс полей
+    document.getElementById('paymentCard').checked = true;
+    document.getElementById('cardFields').style.display = 'block';
+    document.getElementById('sbpFields').style.display = 'none';
+    document.getElementById('cardNumber').value = '';
+    document.getElementById('cardExpiry').value = '';
+    document.getElementById('cardCvv').value = '';
+  });
+
+  // Кнопка Оплатить – AJAX запрос
+  document.getElementById('payButton').addEventListener('click', function() {
+    const button = buyModal._relatedTarget;
+    if (!button) return;
+    const productId = button.getAttribute('data-product-id');
+    fetch(`/buy/${productId}`, { method: 'POST' })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Заказ оформлен! Спасибо за покупку.');
+          const modal = bootstrap.Modal.getInstance(buyModal);
+          modal.hide();
+        } else {
+          alert('Ошибка: ' + data.message);
+        }
+      })
+      .catch(() => alert('Ошибка соединения'));
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Жалобы{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin_panel') }}" class="btn btn-outline-secondary mb-3">← Назад</a>
+<h2>Жалобы пользователей</h2>
+{% if complaints %}
+  {% for c in complaints %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5>Жалоба #{{ c.id }} от пользователя ID {{ c.user_id }} на товар «{{ c.product_name }}»</h5>
+      <p>{{ c.text }}</p>
+      <small class="text-muted">{{ c.date }}</small>
+      {% if c.reply %}
+        <div class="alert alert-success mt-2">Ответ от {{ c.replied_by }}: {{ c.reply }}</div>
+      {% else %}
+        <form method="post" action="{{ url_for('admin_reply_complaint', complaint_id=c.id) }}" class="mt-2">
+          <div class="input-group">
+            <input type="text" class="form-control" name="reply" placeholder="Ваш ответ...">
+            <button class="btn btn-primary">Отправить</button>
+          </div>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <p>Жалоб пока нет.</p>
+{% endif %}
+{% endblock %}

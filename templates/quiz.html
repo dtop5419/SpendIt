@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Анкета{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="text-center mb-4">Расскажите о себе</h2>
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Какие категории вам интересны?</label>
+                        <div class="row">
+                            {% for cat in categories %}
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="interests"
+                                           value="{{ cat }}" id="int_{{ loop.index }}">
+                                    <label class="form-check-label" for="int_{{ loop.index }}">{{ cat }}</label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <small class="text-muted">Можно выбрать несколько или ни одной — тогда мы будем показывать всё.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="income" class="form-label">Ваш примерный ежемесячный доход (в рублях)</label>
+                        <input type="number" class="form-control" id="income" name="income"
+                               placeholder="Например, 60000" required min="1">
+                        <small class="text-muted">Нужно, чтобы мы могли посоветовать товары, которые вам по карману.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Сохранить и перейти к покупкам</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
