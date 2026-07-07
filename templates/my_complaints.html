@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Мои жалобы{% endblock %}
+{% block content %}
+<a href="{{ url_for('index') }}" class="btn btn-outline-secondary mb-3">← Назад</a>
+<h2>📩 Мои жалобы</h2>
+{% if complaints %}
+  <div class="list-group">
+    {% for c in complaints %}
+    <div class="list-group-item">
+      <div class="d-flex justify-content-between">
+        <h6>Жалоба на «{{ c.product_name }}»</h6>
+        <small class="text-muted">{{ c.date }}</small>
+      </div>
+      <p>{{ c.text }}</p>
+      {% if c.reply %}
+        <div class="alert alert-success mb-0">
+          <strong>Ответ от {{ c.replied_by }}:</strong> {{ c.reply }}
+        </div>
+      {% else %}
+        <span class="status-badge status-pending">Ожидает ответа</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">У вас пока нет жалоб.</p>
+{% endif %}
+{% endblock %}

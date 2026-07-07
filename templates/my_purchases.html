@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Мои покупки{% endblock %}
+{% block content %}
+<a href="{{ url_for('index') }}" class="btn btn-outline-secondary mb-3">← Назад</a>
+<h2>📦 Мои покупки</h2>
+{% if purchases %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Товар</th>
+        <th>Цена</th>
+        <th>Дата</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in purchases %}
+      <tr>
+        <td>{{ p.product_name }}</td>
+        <td>{{ p.price }} ₽</td>
+        <td>{{ p.date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p class="text-muted">Вы пока ничего не купили.</p>
+{% endif %}
+{% endblock %}
