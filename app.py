@@ -121,11 +121,15 @@ with app.app_context():
         db.session.add_all(products)
         db.session.commit()
 
-# --- Контекстный процессор (глобальные переменные для шаблонов) ---
+# --- Контекстный процессор ---
 @app.context_processor
 def inject_globals():
     categories = sorted({p.category for p in Product.query.all()})
-    return dict(categories=categories)
+    notifications = 0
+    if current_user.is_authenticated:
+        replied = Complaint.query.filter_by(user_id=current_user.id).filter(Complaint.reply.isnot(None)).count()
+        notifications = replied
+    return dict(categories=categories, notifications=notifications)
 
 # --- Персональная сортировка ---
 def personalized_sort(offers, user):
@@ -220,17 +224,20 @@ def quiz():
     cats = sorted({p.category for p in Product.query.all()})
     return render_template('quiz.html', categories=cats)
 
-# --- Главная ---
+
 @app.route('/')
 @login_required
 def index():
     budget = request.args.get('budget', '', type=int)
     selected_categories = request.args.getlist('category')
     sort_option = request.args.get('sort', 'price_asc')
+    personalized_param = request.args.get('personalized', '0')
     products = Product.query.all()
     personalized = False
     rec_budget = None
-    if current_user.quiz_done and not budget and not selected_categories:
+
+    # Только ручное управление через тумблер
+    if current_user.quiz_done and personalized_param == '1':
         personalized = True
         if current_user.income > 0:
             rec_budget = int((current_user.income / 15 + current_user.income / 30) / 2)
@@ -240,6 +247,7 @@ def index():
             products = [p for p in products if p.price <= budget]
         if selected_categories:
             products = [p for p in products if p.category in selected_categories]
+
         if sort_option == 'price_asc':
             products.sort(key=lambda x: x.price)
         elif sort_option == 'price_desc':
@@ -248,6 +256,7 @@ def index():
             products.sort(key=lambda x: x.name.lower())
         elif sort_option == 'name_desc':
             products.sort(key=lambda x: x.name.lower(), reverse=True)
+
     return render_template('index.html',
                            offers=products,
                            budget=budget if budget else '',
@@ -399,7 +408,6 @@ def admin_add_product():
         db.session.commit()
         flash('Товар добавлен.')
         return redirect(url_for('admin_products'))
-    # Исправлено: получаем список строк, а не кортежей
     categories = sorted({p.category for p in Product.query.all()})
     return render_template('admin/add_product.html', categories=categories)
 
@@ -428,7 +436,6 @@ def admin_edit_product(product_id):
         db.session.commit()
         flash('Товар обновлён.')
         return redirect(url_for('admin_products'))
-    # Исправлено: получаем список строк
     categories = sorted({p.category for p in Product.query.all()})
     return render_template('admin/edit_product.html', product=product, categories=categories)
 
@@ -475,8 +482,18 @@ def admin_reply_complaint(complaint_id):
     flash('Ответ отправлен.')
     return redirect(url_for('admin_complaints'))
 
+@app.route('/my/purchases')
+@login_required
+def my_purchases():
+    purchases = Purchase.query.filter_by(user_id=current_user.id).order_by(Purchase.id.desc()).all()
+    return render_template('my_purchases.html', purchases=purchases)
+
+@app.route('/my/complaints')
+@login_required
+def my_complaints():
+    complaints = Complaint.query.filter_by(user_id=current_user.id).order_by(Complaint.id.desc()).all()
+    return render_template('my_complaints.html', complaints=complaints)
+
 if __name__ == '__main__':
-    # Берем порт из переменной окружения PORT, или используем 5000 по умолчанию
     port = int(os.environ.get('PORT', 5000))
-    # Запускаем сервер на всех интерфейсах (0.0.0.0) и нужном порту
     app.run(host='0.0.0.0', port=port, debug=True)
