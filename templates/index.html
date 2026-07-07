@@ -42,9 +42,23 @@
 
     <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА – ТОВАРЫ -->
     <div class="col-md-8 px-2">
-      {% if personalized and rec_budget %}
-      <div class="alert alert-success py-2 mb-3">
-        🔥 Персональные рекомендации под ваш бюджет (~{{ rec_budget }} ₽) и интересы
+      <!-- Карточка с тумблером персональных рекомендаций -->
+      {% if current_user.quiz_done %}
+      <div class="card mb-3 border-0 shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center py-2 px-3">
+          <div>
+            <span class="fw-semibold" style="font-size: 0.95rem;">🔥 Персональные рекомендации</span>
+            <span class="text-muted ms-2" style="font-size: 0.85rem;">
+              под ваш бюджет (~{{ rec_budget if rec_budget else ((current_user.income / 15 + current_user.income / 30) / 2) | int }} ₽) и интересы
+            </span>
+          </div>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" id="personalToggle"
+                   {% if personalized %}checked{% endif %}
+                   onchange="togglePersonalized(this)">
+            <label class="form-check-label" for="personalToggle"></label>
+          </div>
+        </div>
       </div>
       {% endif %}
 
@@ -163,11 +177,36 @@
 
 {% block scripts %}
 <script>
-  // Фильтры
+  // Функция для переключения персональных рекомендаций
+  function togglePersonalized(checkbox) {
+    const url = new URL(window.location.href);
+    if (checkbox.checked) {
+      // ВКЛЮЧАЕМ
+      url.searchParams.set('personalized', '1');
+      url.searchParams.delete('budget');
+      url.searchParams.delete('category');
+      url.searchParams.set('sort', 'price_asc');
+    } else {
+      // ВЫКЛЮЧАЕМ
+      url.searchParams.delete('personalized');
+    }
+    window.location.href = url.toString();
+  }
+
+  // При отправке формы (категории/сортировка) убираем personalized из URL
+  document.getElementById('filterForm').addEventListener('submit', function(e) {
+    const url = new URL(this.action);
+    url.searchParams.delete('personalized');
+    this.action = url.toString();
+  });
+
+  // Категории — отправка формы
   document.querySelectorAll('.category-checkbox').forEach(cb => {
     cb.addEventListener('change', () => document.getElementById('filterForm').submit());
   });
-  document.getElementById('sort').addEventListener('change', () => {
+
+  // Сортировка — отправка формы
+  document.getElementById('sort').addEventListener('change', function() {
     document.getElementById('filterForm').submit();
   });
 
@@ -179,7 +218,7 @@
     });
   });
 
-  // Модальное окно покупки – заполнение при открытии
+  // Модальное окно покупки
   var buyModal = document.getElementById('buyModal');
   buyModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
@@ -188,7 +227,6 @@
     document.getElementById('modalProductPrice').textContent = button.getAttribute('data-price') + ' ₽';
     document.getElementById('modalProductImage').src = button.getAttribute('data-image');
     document.getElementById('modalProductCategory').textContent = button.getAttribute('data-category');
-    // Сброс полей
     document.getElementById('paymentCard').checked = true;
     document.getElementById('cardFields').style.display = 'block';
     document.getElementById('sbpFields').style.display = 'none';
@@ -197,7 +235,7 @@
     document.getElementById('cardCvv').value = '';
   });
 
-  // Кнопка Оплатить – AJAX запрос
+  // Кнопка Оплатить
   document.getElementById('payButton').addEventListener('click', function() {
     const button = buyModal._relatedTarget;
     if (!button) return;
