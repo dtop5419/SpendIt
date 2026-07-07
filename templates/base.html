@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Куда потратить деньги?{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* (весь предыдущий CSS из base.html остаётся без изменений) */
         :root {
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -29,6 +29,7 @@
             background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             backdrop-filter: blur(10px);
+            padding: 0.5rem 0;
         }
         .navbar-brand {
             font-weight: 700;
@@ -39,6 +40,7 @@
         .navbar-text {
             color: #e5e7eb !important;
             font-weight: 500;
+            font-size: 0.9rem;
         }
         .navbar .badge {
             font-weight: 500;
@@ -49,9 +51,25 @@
             color: #d1d5db !important;
             transition: var(--transition);
             font-weight: 500;
+            position: relative;
         }
         .navbar .nav-link:hover {
             color: #ffffff !important;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
         }
         .product-card {
             border: 1px solid #f0f0f0;
@@ -200,11 +218,56 @@
             font-weight: 600;
             letter-spacing: -0.3px;
         }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25em 0.75em;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .status-new { background: #e0f2fe; color: #0369a1; }
+        .status-answered { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+
+        /* Стили для тумблера с плавной анимацией */
+        .form-switch .form-check-input {
+            width: 3.2em !important;
+            height: 1.7em !important;
+            margin-top: 0;
+            cursor: pointer;
+            border: 2px solid #d1d5db;
+            background-color: #e5e7eb;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-switch .form-check-input:checked {
+            background-color: #10b981;
+            border-color: #10b981;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='white'/%3e%3c/svg%3e");
+        }
+        .form-switch .form-check-input:focus {
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        .form-switch .form-check-input:not(:checked) {
+            background-color: #d1d5db;
+            border-color: #9ca3af;
+        }
+
+        /* Анимация кружка при переключении */
+        @keyframes switchOn {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(1.2em); }
+        }
+        @keyframes switchOff {
+            0% { transform: translateX(1.2em); }
+            100% { transform: translateX(0); }
+        }
+
         @media (max-width: 768px) {
             .product-card .card-img-top {
                 height: 160px;
             }
-            /* на мобиле боковые панели скрывать не будем, они управляются сеткой Bootstrap */
         }
     </style>
 </head>
@@ -216,8 +279,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav align-items-center">
                     {% if current_user.is_authenticated %}
+                        <li class="nav-item me-2">
+                            <a class="nav-link position-relative" href="{{ url_for('my_purchases') }}" title="Мои покупки">
+                                <i class="bi bi-box-seam fs-5"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="nav-link position-relative" href="{{ url_for('my_complaints') }}" title="Мои жалобы">
+                                <i class="bi bi-envelope fs-5"></i>
+                                {% if notifications is defined and notifications > 0 %}
+                                <span class="notification-badge">{{ notifications }}</span>
+                                {% endif %}
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <span class="navbar-text me-3">
                                 Привет, {{ current_user.username }}
