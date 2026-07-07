@@ -19,9 +19,10 @@
     </div>
   </div>
 
-  <div class="row g-0">
-    <!-- ЛЕВАЯ КОЛОНКА – КАТЕГОРИИ -->
-    <div class="col-md-2 ps-2 pe-1">
+  <!-- НА ДЕСКТОПЕ: боковые панели, НА МОБИЛКАХ: две колонки сверху -->
+  <div class="row g-0 mobile-filters-row">
+    <!-- КАТЕГОРИИ -->
+    <div class="col-md-2 col-6 ps-2 pe-1 mb-2 mb-md-0">
       <div class="card shadow-sm" style="margin-left: -0.75rem;">
         <div class="card-header">
           <strong>Категории</strong>
@@ -40,13 +41,30 @@
       </div>
     </div>
 
+    <!-- СОРТИРОВКА (на мобилках справа от категорий) -->
+    <div class="col-md-2 col-6 ps-1 pe-2 mb-2 mb-md-0 order-md-last">
+      <div class="card shadow-sm" style="margin-right: -0.75rem;">
+        <div class="card-header">
+          <strong>Сортировка</strong>
+        </div>
+        <div class="card-body" style="padding: 0.75rem;">
+          <select class="form-select" id="sort" name="sort">
+            <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Цена ↑</option>
+            <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Цена ↓</option>
+            <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название А→Я</option>
+            <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название Я→А</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА – ТОВАРЫ -->
-    <div class="col-md-8 px-2">
+    <div class="col-md-8 col-12 px-2">
       <!-- Карточка с тумблером персональных рекомендаций -->
       {% if current_user.quiz_done %}
       <div class="card mb-3 border-0 shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center py-2 px-3">
-          <div>
+        <div class="card-body d-flex justify-content-between align-items-center py-2 px-3 flex-wrap">
+          <div class="me-2 mb-1 mb-md-0">
             <span class="fw-semibold" style="font-size: 0.95rem;">🔥 Персональные рекомендации</span>
             <span class="text-muted ms-2" style="font-size: 0.85rem;">
               под ваш бюджет (~{{ rec_budget if rec_budget else ((current_user.income / 15 + current_user.income / 30) / 2) | int }} ₽) и интересы
@@ -65,7 +83,7 @@
       {% if offers %}
       <div class="row g-2">
         {% for offer in offers %}
-        <div class="col-lg-4 col-md-6 mb-2">
+        <div class="col-lg-4 col-md-6 col-6 mb-2">
           <div class="card h-100 shadow-sm product-card" onclick="location.href='/product/{{ offer.id }}'" style="cursor: pointer;">
             <img src="{{ offer.image }}" class="card-img-top" alt="{{ offer.name }}" style="height: 200px; object-fit: cover;">
             <div class="card-body d-flex flex-column">
@@ -77,7 +95,7 @@
                 {% endif %}
                 <span class="fs-4 fw-bold text-danger">{{ offer.price }} ₽</span>
               </div>
-              <p class="card-text flex-grow-1">{{ offer.desc }}</p>
+              <p class="card-text flex-grow-1 d-none d-md-block">{{ offer.desc }}</p>
               <button class="btn btn-success mt-auto" data-bs-toggle="modal" data-bs-target="#buyModal"
                       data-product="{{ offer.name }}" data-price="{{ offer.price }}"
                       data-image="{{ offer.image }}" data-category="{{ offer.category }}"
@@ -95,23 +113,6 @@
         Ничего не найдено. Измените фильтры или увеличьте бюджет.
       </div>
       {% endif %}
-    </div>
-
-    <!-- ПРАВАЯ КОЛОНКА – СОРТИРОВКА -->
-    <div class="col-md-2 pe-2 ps-1">
-      <div class="card shadow-sm" style="margin-right: -0.75rem;">
-        <div class="card-header">
-          <strong>Сортировка</strong>
-        </div>
-        <div class="card-body" style="padding: 0.75rem;">
-          <select class="form-select" id="sort" name="sort">
-            <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Цена ↑</option>
-            <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Цена ↓</option>
-            <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Название А→Я</option>
-            <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Название Я→А</option>
-          </select>
-        </div>
-      </div>
     </div>
   </div>
 </form>
@@ -177,40 +178,33 @@
 
 {% block scripts %}
 <script>
-  // Функция для переключения персональных рекомендаций
   function togglePersonalized(checkbox) {
     const url = new URL(window.location.href);
     if (checkbox.checked) {
-      // ВКЛЮЧАЕМ
       url.searchParams.set('personalized', '1');
       url.searchParams.delete('budget');
       url.searchParams.delete('category');
       url.searchParams.set('sort', 'price_asc');
     } else {
-      // ВЫКЛЮЧАЕМ
       url.searchParams.delete('personalized');
     }
     window.location.href = url.toString();
   }
 
-  // При отправке формы (категории/сортировка) убираем personalized из URL
   document.getElementById('filterForm').addEventListener('submit', function(e) {
     const url = new URL(this.action);
     url.searchParams.delete('personalized');
     this.action = url.toString();
   });
 
-  // Категории — отправка формы
   document.querySelectorAll('.category-checkbox').forEach(cb => {
     cb.addEventListener('change', () => document.getElementById('filterForm').submit());
   });
 
-  // Сортировка — отправка формы
   document.getElementById('sort').addEventListener('change', function() {
     document.getElementById('filterForm').submit();
   });
 
-  // Переключение способов оплаты
   document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
     radio.addEventListener('change', function() {
       document.getElementById('cardFields').style.display = this.value === 'card' ? 'block' : 'none';
@@ -218,7 +212,6 @@
     });
   });
 
-  // Модальное окно покупки
   var buyModal = document.getElementById('buyModal');
   buyModal.addEventListener('show.bs.modal', function (event) {
     var button = event.relatedTarget;
@@ -235,7 +228,6 @@
     document.getElementById('cardCvv').value = '';
   });
 
-  // Кнопка Оплатить
   document.getElementById('payButton').addEventListener('click', function() {
     const button = buyModal._relatedTarget;
     if (!button) return;
