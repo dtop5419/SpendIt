@@ -3,304 +3,1352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="description" content="SpendIt — удобный сервис для управления покупками и расходами">
+
     <title>{% block title %}Куда потратить деньги?{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    >
+
+    <!-- Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
     <style>
+
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --secondary: #6b7280;
-            --dark-bg: #111827;
-            --light-bg: #f9fafb;
-            --card-shadow: 0 1px 3px rgba(0,0,0,0.06);
-            --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.1);
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+
+            --success: #10b981;
+            --success-dark: #059669;
+
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+
+            --warning: #f59e0b;
+            --warning-dark: #d97706;
+
+            --info: #0ea5e9;
+
+            --dark: #0b0f19;
+            --dark-secondary: #111827;
+            --dark-card: #151b29;
+
+            --text: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+
+            --background: #f4f6fb;
+            --surface: #ffffff;
+            --border: #e5e7eb;
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 22px;
+
+            --shadow-sm:
+                0 1px 2px rgba(15, 23, 42, 0.04);
+
+            --shadow-md:
+                0 6px 20px rgba(15, 23, 42, 0.07);
+
+            --shadow-lg:
+                0 15px 40px rgba(15, 23, 42, 0.10);
+
+            --transition:
+                all 0.2s cubic-bezier(.4, 0, .2, 1);
         }
 
-        * {
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #f3f4f6;
-            color: #1f2937;
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                'Inter',
+                -apple-system,
+                BlinkMacSystemFont,
+                'Segoe UI',
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 0%,
+                    rgba(99, 102, 241, 0.06),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(14, 165, 233, 0.04),
+                    transparent 25%
+                ),
+                var(--background);
+
+            color: var(--text);
             line-height: 1.6;
+
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        .navbar {
-            background: linear-gradient(135deg, #111827 0%, #1f2937 100%) !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 0.5rem 0;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.4rem;
-            letter-spacing: -0.5px;
-            color: #f9fafb !important;
-        }
-
-        .navbar-text {
-            color: #e5e7eb !important;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .navbar .badge {
-            font-weight: 500;
-            padding: 0.35em 0.65em;
-            border-radius: 6px;
-        }
-
-        .navbar .nav-link {
-            color: #d1d5db !important;
-            font-weight: 500;
-        }
-
-        .navbar .nav-link:hover {
-            color: #ffffff !important;
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .product-card {
-            border: 1px solid #f0f0f0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
-            box-shadow: var(--card-shadow);
-        }
-
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .product-card .card-img-top {
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 1px solid #f3f4f6;
-        }
-
-        .product-card .card-body {
-            padding: 1.25rem;
-        }
-
-        .product-card .card-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
+        ::selection {
+            background: rgba(99, 102, 241, 0.2);
             color: #111827;
         }
 
-        .badge.bg-danger {
-            background-color: #ef4444 !important;
-            border-radius: 6px;
-        }
-
-        .badge.bg-warning {
-            background-color: #f59e0b !important;
-            color: #1f2937 !important;
-            border-radius: 6px;
-        }
-
-        .btn {
-            font-weight: 500;
-            transition: background-color 0.15s, border-color 0.15s;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            border-color: var(--primary-hover);
-        }
-
-        .btn-success {
-            background-color: #10b981;
-            border-color: #10b981;
-        }
-
-        .btn-success:hover {
-            background-color: #059669;
-            border-color: #059669;
-        }
-
-        .card-header {
-            background-color: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .card {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-        }
-
-        .alert {
-            border-radius: 10px;
-            border: none;
-            font-weight: 500;
-        }
-
-        .alert-info {
-            background-color: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .table {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-        }
-
-        .table thead th {
-            background-color: #f9fafb;
-            font-weight: 600;
-            border-bottom: 2px solid #e5e7eb;
-            color: #374151;
-        }
-
-        .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid #d1d5db;
-            padding: 0.5rem 0.75rem;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .modal-content {
-            border-radius: 16px;
-            border: none;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        }
-
-        .modal-header {
-            border-bottom: 1px solid #f3f4f6;
-            padding: 1.25rem 1.5rem;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #f3f4f6;
-            padding: 1.25rem 1.5rem;
+        img {
+            max-width: 100%;
         }
 
         a {
             color: var(--primary);
             text-decoration: none;
+            transition: var(--transition);
         }
 
         a:hover {
-            color: var(--primary-hover);
+            color: var(--primary-dark);
         }
 
-        h1, h2, h3, h4 {
+
+        /* =========================================================
+           TYPOGRAPHY
+        ========================================================= */
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        h1 {
+            font-weight: 800;
+        }
+
+        p {
+            color: var(--text-secondary);
+        }
+
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+
+            min-height: 68px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #080b12 0%,
+                    #101624 50%,
+                    #0d1320 100%
+                ) !important;
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+            box-shadow:
+                0 8px 30px rgba(0, 0, 0, 0.16);
+
+            padding: 0.65rem 0;
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .navbar::after {
+            content: "";
+
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(99, 102, 241, 0.5),
+                    transparent
+                );
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           LOGO
+        ========================================================= */
+
+        .navbar-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+
+            color: #ffffff !important;
+
+            font-size: 1.35rem;
+            font-weight: 800;
+
+            letter-spacing: -0.04em;
+
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+        .brand-mark {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 36px;
+            height: 36px;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #8b5cf6
+                );
+
+            box-shadow:
+                0 5px 18px rgba(99, 102, 241, 0.35);
+
+            color: #ffffff;
+
+            font-size: 1rem;
+        }
+
+        .brand-mark::after {
+            content: "";
+
+            position: absolute;
+            inset: 1px;
+
+            border-radius: 10px;
+
+            border: 1px solid rgba(255,255,255,0.18);
+
+            pointer-events: none;
+        }
+
+        .brand-text {
+            line-height: 1;
+        }
+
+
+        /* =========================================================
+           NAV LINKS
+        ========================================================= */
+
+        .navbar .nav-link {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            color: #aeb7c8 !important;
+
+            font-size: 0.9rem;
             font-weight: 600;
-            letter-spacing: -0.3px;
+
+            padding: 0.6rem 0.75rem !important;
+
+            border-radius: 9px;
+
+            transition: var(--transition);
         }
 
-        .status-badge {
-            display: inline-block;
-            padding: 0.25em 0.75em;
-            border-radius: 20px;
-            font-size: 0.8rem;
+        .navbar .nav-link:hover {
+            color: #ffffff !important;
+
+            background: rgba(255,255,255,0.06);
+
+            transform: translateY(-1px);
+        }
+
+        .navbar .nav-link:active {
+            transform: translateY(0);
+        }
+
+
+        /* =========================================================
+           NAV ICONS
+        ========================================================= */
+
+        .navbar .nav-link i {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+
+        /* =========================================================
+           USER AREA
+        ========================================================= */
+
+        .navbar-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            color: #d5dae4 !important;
+
+            font-size: 0.88rem;
             font-weight: 500;
         }
 
-        .status-new { background: #e0f2fe; color: #0369a1; }
-        .status-answered { background: #d1fae5; color: #065f46; }
-        .status-pending { background: #fef3c7; color: #92400e; }
+        .navbar-text strong {
+            color: #ffffff;
+        }
 
-        /* Тумблер — без анимаций */
+
+        /* =========================================================
+           NAV BADGES
+        ========================================================= */
+
+        .navbar .badge {
+            border: 1px solid rgba(255,255,255,0.08);
+
+            padding: 0.35rem 0.6rem;
+
+            border-radius: 7px;
+
+            font-size: 0.68rem;
+            font-weight: 700;
+
+            letter-spacing: 0.01em;
+        }
+
+        .navbar .badge.bg-danger {
+            background: rgba(239,68,68,0.15) !important;
+            color: #fca5a5 !important;
+            border-color: rgba(239,68,68,0.25);
+        }
+
+        .navbar .badge.bg-warning {
+            background: rgba(245,158,11,0.15) !important;
+            color: #fcd34d !important;
+            border-color: rgba(245,158,11,0.25);
+        }
+
+
+        /* =========================================================
+           NOTIFICATION
+        ========================================================= */
+
+        .notification-badge {
+            position: absolute;
+
+            top: 1px;
+            right: 1px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            min-width: 18px;
+            height: 18px;
+
+            padding: 0 5px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #dc2626
+                );
+
+            color: #ffffff;
+
+            border: 2px solid #0b0f19;
+
+            border-radius: 999px;
+
+            font-size: 0.62rem;
+            font-weight: 800;
+
+            line-height: 1;
+
+            box-shadow:
+                0 3px 8px rgba(239,68,68,0.35);
+        }
+
+
+        /* =========================================================
+           NAVBAR TOGGLER
+        ========================================================= */
+
+        .navbar-toggler {
+            padding: 0.45rem 0.55rem;
+
+            border: 1px solid rgba(255,255,255,0.12);
+
+            border-radius: 9px;
+
+            background: rgba(255,255,255,0.04);
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.2);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        main.container {
+            padding-top: 10px;
+            padding-bottom: 50px;
+        }
+
+
+        /* =========================================================
+           CARDS
+        ========================================================= */
+
+        .card {
+            background: rgba(255,255,255,0.92);
+
+            border: 1px solid rgba(229,231,235,0.9);
+
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow-sm);
+
+            overflow: hidden;
+
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #fafbfc
+                );
+
+            border-bottom: 1px solid var(--border);
+
+            padding: 1rem 1.2rem;
+
+            color: #374151;
+
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+
+        /* =========================================================
+           PRODUCT CARDS
+        ========================================================= */
+
+        .product-card {
+            position: relative;
+
+            height: 100%;
+
+            border:
+                1px solid rgba(229,231,235,0.9);
+
+            border-radius: var(--radius-lg);
+
+            overflow: hidden;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 2px 6px rgba(15,23,42,0.04);
+
+            transition:
+                transform 0.25s cubic-bezier(.4,0,.2,1),
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+
+            border-color:
+                rgba(99,102,241,0.25);
+
+            box-shadow:
+                0 18px 45px rgba(15,23,42,0.12);
+        }
+
+        .product-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    #8b5cf6
+                );
+
+            opacity: 0;
+
+            transition: var(--transition);
+
+            z-index: 2;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+           PRODUCT IMAGE
+        ========================================================= */
+
+        .product-card .card-img-top {
+            width: 100%;
+            height: 210px;
+
+            object-fit: cover;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f3f4f6,
+                    #e5e7eb
+                );
+
+            border-bottom:
+                1px solid #eef0f3;
+
+            transition:
+                transform 0.45s cubic-bezier(.4,0,.2,1);
+        }
+
+        .product-card:hover .card-img-top {
+            transform: scale(1.025);
+        }
+
+
+        /* =========================================================
+           PRODUCT BODY
+        ========================================================= */
+
+        .product-card .card-body {
+            display: flex;
+            flex-direction: column;
+
+            padding: 1.2rem;
+        }
+
+        .product-card .card-title {
+            margin-bottom: 0.35rem;
+
+            color: #111827;
+
+            font-size: 1.05rem;
+            font-weight: 700;
+
+            line-height: 1.35;
+
+            letter-spacing: -0.02em;
+        }
+
+        .product-card .text-muted {
+            color: #8b93a1 !important;
+        }
+
+        .product-card .fs-4 {
+            color: #111827;
+
+            font-weight: 800;
+
+            letter-spacing: -0.04em;
+        }
+
+
+        /* =========================================================
+           PRODUCT BUTTON
+        ========================================================= */
+
+        .product-card .btn {
+            margin-top: auto;
+        }
+
+
+        /* =========================================================
+           BUTTONS
+        ========================================================= */
+
+        .btn {
+            position: relative;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            min-height: 40px;
+
+            border-radius: 9px;
+
+            padding: 0.55rem 1rem;
+
+            font-weight: 600;
+
+            transition:
+                transform 0.18s ease,
+                box-shadow 0.18s ease,
+                background-color 0.18s ease,
+                border-color 0.18s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:focus-visible {
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.2);
+        }
+
+
+        /* PRIMARY */
+
+        .btn-primary {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+            border-color: transparent;
+
+            box-shadow:
+                0 4px 12px rgba(79,70,229,0.18);
+        }
+
+        .btn-primary:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #7073f4,
+                    #4338ca
+                );
+
+            border-color: transparent;
+
+            box-shadow:
+                0 7px 18px rgba(79,70,229,0.25);
+        }
+
+
+        /* SUCCESS */
+
+        .btn-success {
+            background:
+                linear-gradient(
+                    135deg,
+                    #10b981,
+                    #059669
+                );
+
+            border-color: transparent;
+
+            box-shadow:
+                0 4px 12px rgba(16,185,129,0.18);
+        }
+
+        .btn-success:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #14c991,
+                    #047857
+                );
+
+            border-color: transparent;
+
+            box-shadow:
+                0 7px 18px rgba(16,185,129,0.25);
+        }
+
+
+        /* DANGER */
+
+        .btn-danger {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #dc2626
+                );
+
+            border-color: transparent;
+        }
+
+        .btn-danger:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #f05252,
+                    #b91c1c
+                );
+        }
+
+
+        /* OUTLINE */
+
+        .btn-outline-primary {
+            color: var(--primary);
+
+            border-color:
+                rgba(99,102,241,0.35);
+
+            background: rgba(99,102,241,0.03);
+        }
+
+        .btn-outline-primary:hover {
+            color: #ffffff;
+
+            background: var(--primary);
+
+            border-color: var(--primary);
+        }
+
+
+        /* =========================================================
+           BADGES
+        ========================================================= */
+
+        .badge {
+            padding: 0.38rem 0.65rem;
+
+            border-radius: 7px;
+
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .badge.bg-danger {
+            background: #fee2e2 !important;
+            color: #b91c1c !important;
+        }
+
+        .badge.bg-warning {
+            background: #fef3c7 !important;
+            color: #92400e !important;
+        }
+
+        .badge.bg-success {
+            background: #d1fae5 !important;
+            color: #047857 !important;
+        }
+
+        .badge.bg-info {
+            background: #e0f2fe !important;
+            color: #0369a1 !important;
+        }
+
+
+        /* =========================================================
+           STATUS BADGES
+        ========================================================= */
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            padding: 0.32rem 0.7rem;
+
+            border-radius: 999px;
+
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .status-new {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .status-answered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+
+        /* =========================================================
+           ALERTS
+        ========================================================= */
+
+        .alert {
+            border: 1px solid transparent;
+
+            border-radius: 12px;
+
+            padding: 0.85rem 1rem;
+
+            font-weight: 500;
+
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-info {
+            background: #eff8ff;
+            color: #075985;
+
+            border-color: #dbeafe;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            color: #065f46;
+
+            border-color: #d1fae5;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            color: #92400e;
+
+            border-color: #fef3c7;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+
+            border-color: #fee2e2;
+        }
+
+        .alert .btn-close {
+            opacity: 0.5;
+        }
+
+        .alert .btn-close:hover {
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+           FORMS
+        ========================================================= */
+
+        .form-label {
+            margin-bottom: 0.45rem;
+
+            color: #374151;
+
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 42px;
+
+            padding:
+                0.55rem 0.8rem;
+
+            border:
+                1px solid #d7dce3;
+
+            border-radius: 9px;
+
+            background-color: #ffffff;
+
+            color: #111827;
+
+            font-size: 0.9rem;
+
+            box-shadow:
+                inset 0 1px 2px rgba(15,23,42,0.02);
+
+            transition: var(--transition);
+        }
+
+        .form-control::placeholder {
+            color: #a3aab5;
+        }
+
+        .form-control:hover,
+        .form-select:hover {
+            border-color: #c4cad4;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+
+            background-color: #ffffff;
+
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.11);
+
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+
+        /* =========================================================
+           INPUT GROUP
+        ========================================================= */
+
+        .input-group .form-control {
+            z-index: 1;
+        }
+
+        .input-group-text {
+            border:
+                1px solid #d7dce3;
+
+            background: #f9fafb;
+
+            color: #6b7280;
+
+            border-radius: 9px;
+        }
+
+
+        /* =========================================================
+           SWITCH
+        ========================================================= */
+
+        .form-switch {
+            padding-left: 3.2em;
+        }
+
         .form-switch .form-check-input {
-            width: 3em !important;
-            height: 1.6em !important;
-            margin-top: 0;
+            width: 2.9em !important;
+            height: 1.55em !important;
+
+            margin-left: -3.2em;
+
+            margin-top: 0.1em;
+
             cursor: pointer;
+
+            background-color: #d1d5db;
+
+            border-color: #c7ccd4;
+
+            box-shadow: none;
+
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease;
         }
 
         .form-switch .form-check-input:checked {
-            background-color: #10b981;
-            border-color: #059669;
+            background-color: var(--success);
+            border-color: var(--success-dark);
         }
 
         .form-switch .form-check-input:focus {
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
+            border-color: var(--success);
+
+            box-shadow:
+                0 0 0 3px rgba(16,185,129,0.15);
         }
 
-        /* ===== МОБИЛЬНАЯ ВЕРСИЯ ===== */
-        @media (max-width: 768px) {
-            .navbar-nav {
-                flex-direction: row !important;
-                flex-wrap: wrap;
-                justify-content: flex-end;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 0;
-            }
 
-            .navbar-nav .nav-item {
-                margin: 0 !important;
-            }
+        /* =========================================================
+           TABLE
+        ========================================================= */
 
-            .navbar-nav .navbar-text {
-                width: 100%;
-                text-align: right;
-                margin: 4px 0 !important;
-                font-size: 0.85rem;
-            }
+        .table-responsive {
+            border-radius: var(--radius-lg);
+        }
+
+        .table {
+            margin-bottom: 0;
+
+            background: #ffffff;
+
+            border-radius: var(--radius-lg);
+
+            overflow: hidden;
+
+            box-shadow: var(--shadow-sm);
+        }
+
+        .table thead th {
+            padding: 0.9rem 1rem;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fafbfc,
+                    #f6f7f9
+                );
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            color: #4b5563;
+
+            font-size: 0.78rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: 0.035em;
+
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 0.9rem 1rem;
+
+            color: #374151;
+
+            vertical-align: middle;
+
+            border-color: #f0f1f3;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+        .table tbody tr:hover {
+            background: #f8f9ff;
+        }
+
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
+
+        .modal-backdrop.show {
+            opacity: 0.65;
+        }
+
+        .modal-content {
+            border: 1px solid rgba(255,255,255,0.7);
+
+            border-radius: var(--radius-xl);
+
+            box-shadow:
+                0 30px 80px rgba(15,23,42,0.2);
+
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.2rem 1.4rem;
+
+            border-bottom:
+                1px solid #eef0f3;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #fafbfc
+                );
+        }
+
+        .modal-title {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .modal-body {
+            padding: 1.4rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.4rem;
+
+            border-top:
+                1px solid #eef0f3;
+
+            background: #fafbfc;
+        }
+
+
+        /* =========================================================
+           DROPDOWNS
+        ========================================================= */
+
+        .dropdown-menu {
+            margin-top: 8px !important;
+
+            padding: 0.4rem;
+
+            border:
+                1px solid rgba(229,231,235,0.9);
+
+            border-radius: 12px;
+
+            background: rgba(255,255,255,0.98);
+
+            box-shadow:
+                0 15px 40px rgba(15,23,42,0.12);
+
+            backdrop-filter: blur(15px);
+        }
+
+        .dropdown-item {
+            padding: 0.55rem 0.7rem;
+
+            border-radius: 8px;
+
+            font-size: 0.88rem;
+
+            transition: var(--transition);
+        }
+
+        .dropdown-item:hover {
+            background: #f3f4ff;
+            color: var(--primary);
+        }
+
+
+        /* =========================================================
+           PAGINATION
+        ========================================================= */
+
+        .pagination .page-link {
+            margin: 0 2px;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 8px !important;
+
+            color: #4b5563;
+
+            font-weight: 600;
+
+            transition: var(--transition);
+        }
+
+        .pagination .page-link:hover {
+            color: var(--primary);
+
+            background: #f3f4ff;
+
+            border-color:
+                rgba(99,102,241,0.2);
+        }
+
+        .pagination .active .page-link {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 9px;
+            height: 9px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eef0f4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c4cad4;
+
+            border-radius: 999px;
+
+            border: 2px solid #eef0f4;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+
+        /* =========================================================
+           MOBILE NAV
+        ========================================================= */
+
+        @media (max-width: 991.98px) {
 
             .navbar-collapse {
-                background: rgba(17, 24, 39, 0.98);
-                border-radius: 12px;
-                margin-top: 8px;
-                padding: 12px;
+                margin-top: 10px;
+
+                padding: 10px;
+
+                border:
+                    1px solid rgba(255,255,255,0.08);
+
+                border-radius: 14px;
+
+                background:
+                    rgba(10,14,23,0.96);
+
+                box-shadow:
+                    0 15px 35px rgba(0,0,0,0.2);
+
+                backdrop-filter: blur(15px);
+            }
+
+            .navbar-nav {
+                gap: 3px;
+            }
+
+            .navbar .nav-link {
+                width: 100%;
+            }
+
+            .navbar-text {
+                width: 100%;
+
+                padding:
+                    0.55rem 0.7rem;
+
+                border-radius: 8px;
+
+                background:
+                    rgba(255,255,255,0.03);
+            }
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 768px) {
+
+            main.container {
+                margin-top: 0 !important;
+
+                padding-top: 6px;
+                padding-bottom: 30px;
+            }
+
+            h1 {
+                font-size: 1.55rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            h3 {
+                font-size: 1.15rem;
+            }
+
+            .card {
+                border-radius: 14px;
+            }
+
+            .card-body {
+                padding: 1rem;
             }
 
             .mobile-filters-row {
                 display: flex !important;
+
                 flex-direction: row !important;
+
                 gap: 8px;
+
                 margin-bottom: 16px;
             }
 
             .mobile-filters-row .col-md-2 {
                 flex: 1;
+
                 width: 50%;
+
                 padding: 0 !important;
+
                 margin: 0 !important;
             }
 
@@ -309,161 +1357,474 @@
             }
 
             .mobile-filters-row .card-header {
-                padding: 8px 12px;
-                font-size: 0.9rem;
+                padding: 8px 10px;
+
+                font-size: 0.78rem;
             }
 
             .mobile-filters-row .card-body {
                 max-height: 200px !important;
+
                 padding: 8px !important;
             }
 
             .col-md-8 {
                 width: 100%;
+
                 padding: 0 !important;
             }
 
             .col-lg-4.col-md-6 {
                 width: 50% !important;
-                padding: 4px !important;
+
+                padding: 5px !important;
             }
 
             .product-card .card-img-top {
-                height: 140px;
+                height: 150px;
             }
 
             .product-card .card-body {
-                padding: 10px;
+                padding: 0.85rem;
             }
 
             .product-card .card-title {
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
 
             .product-card .fs-4 {
-                font-size: 1.1rem !important;
+                font-size: 1.05rem !important;
             }
 
             .product-card .btn {
-                font-size: 0.85rem;
-                padding: 6px 12px;
-            }
+                min-height: 36px;
 
-            h1 {
-                font-size: 1.5rem;
-            }
+                padding:
+                    0.4rem 0.65rem;
 
-            .col-md-6 {
-                width: 100%;
+                font-size: 0.78rem;
             }
 
             .form-switch .form-check-input {
-                width: 2.5em !important;
+                width: 2.55em !important;
                 height: 1.4em !important;
             }
 
             .table {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
             }
 
             .table thead th,
             .table tbody td {
-                padding: 8px 6px;
+                padding: 0.65rem 0.55rem;
             }
         }
 
+
+        /* =========================================================
+           SMALL PHONES
+        ========================================================= */
+
         @media (max-width: 480px) {
+
+            .navbar {
+                min-height: 62px;
+
+                padding: 0.5rem 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.15rem;
+            }
+
+            .brand-mark {
+                width: 32px;
+                height: 32px;
+
+                border-radius: 9px;
+            }
+
+            .navbar .container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            main.container {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            .col-lg-4.col-md-6 {
+                width: 50% !important;
+
+                padding: 3px !important;
+            }
+
+            .product-card {
+                border-radius: 12px;
+            }
+
             .product-card .card-img-top {
                 height: 120px;
             }
 
+            .product-card .card-body {
+                padding: 8px;
+            }
+
             .product-card .card-title {
-                font-size: 0.85rem;
+                font-size: 0.78rem;
+
+                line-height: 1.25;
             }
 
             .product-card .fs-4 {
-                font-size: 1rem !important;
+                font-size: 0.95rem !important;
             }
 
             .product-card .btn {
-                font-size: 0.8rem;
-                padding: 4px 10px;
+                min-height: 32px;
+
+                padding:
+                    0.3rem 0.45rem;
+
+                font-size: 0.7rem;
+
+                border-radius: 7px;
+            }
+
+            .badge {
+                font-size: 0.64rem;
+
+                padding:
+                    0.28rem 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.35rem;
+            }
+
+            .alert {
+                padding:
+                    0.7rem 0.8rem;
+
+                font-size: 0.82rem;
+            }
+
+            .modal-content {
+                border-radius: 16px;
+            }
+
+            .modal-body {
+                padding: 1rem;
             }
         }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+
+                transition: none !important;
+
+                animation: none !important;
+            }
+        }
+
     </style>
 </head>
+
 <body>
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================= -->
+
     <nav class="navbar navbar-expand-lg navbar-dark">
+
         <div class="container">
-            <a class="navbar-brand" href="/">💰 SpendIt</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+
+            <!-- LOGO -->
+            <a class="navbar-brand" href="/">
+
+                <span class="brand-mark">
+                    <i class="bi bi-wallet2"></i>
+                </span>
+
+                <span class="brand-text">
+                    SpendIt
+                </span>
+
+            </a>
+
+
+            <!-- MOBILE BUTTON -->
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Переключатель навигации"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+
+
+            <!-- NAVIGATION -->
+            <div
+                class="collapse navbar-collapse justify-content-end"
+                id="navbarNav"
+            >
+
                 <ul class="navbar-nav align-items-center">
+
                     {% if current_user.is_authenticated %}
-                        <li class="nav-item me-2">
-                            <a class="nav-link position-relative" href="{{ url_for('my_purchases') }}" title="Мои покупки">
-                                <i class="bi bi-box-seam fs-5"></i>
+
+                        <!-- PURCHASES -->
+                        <li class="nav-item me-1">
+
+                            <a
+                                class="nav-link position-relative"
+                                href="{{ url_for('my_purchases') }}"
+                                title="Мои покупки"
+                                aria-label="Мои покупки"
+                            >
+
+                                <i class="bi bi-bag-check"></i>
+
+                                <span class="d-lg-none">
+                                    Мои покупки
+                                </span>
+
                             </a>
+
                         </li>
-                        <li class="nav-item me-2">
-                            <a class="nav-link position-relative" href="{{ url_for('my_complaints') }}" title="Мои жалобы">
-                                <i class="bi bi-envelope fs-5"></i>
+
+
+                        <!-- COMPLAINTS -->
+                        <li class="nav-item me-1">
+
+                            <a
+                                class="nav-link position-relative"
+                                href="{{ url_for('my_complaints') }}"
+                                title="Мои жалобы"
+                                aria-label="Мои жалобы"
+                            >
+
+                                <i class="bi bi-chat-left-text"></i>
+
+                                <span class="d-lg-none">
+                                    Мои жалобы
+                                </span>
+
                                 {% if notifications is defined and notifications > 0 %}
-                                <span class="notification-badge">{{ notifications }}</span>
+
+                                    <span class="notification-badge">
+                                        {{ notifications }}
+                                    </span>
+
                                 {% endif %}
+
                             </a>
+
                         </li>
+
+
+                        <!-- USER -->
                         <li class="nav-item">
-                            <span class="navbar-text me-3">
-                                Привет, {{ current_user.username }}
+
+                            <span class="navbar-text me-lg-2">
+
+                                <span>
+                                    Привет,
+                                    <strong>
+                                        {{ current_user.username }}
+                                    </strong>
+                                </span>
+
                                 {% if current_user.role == 'admin' %}
-                                    <span class="badge bg-danger">Администратор</span>
+
+                                    <span class="badge bg-danger">
+                                        Администратор
+                                    </span>
+
                                 {% elif current_user.role == 'subadmin' %}
-                                    <span class="badge bg-warning text-dark">Суб-админ</span>
+
+                                    <span class="badge bg-warning text-dark">
+                                        Суб-админ
+                                    </span>
+
                                 {% endif %}
+
                             </span>
+
                         </li>
+
+
+                        <!-- ADMIN -->
                         {% if current_user.role in ('admin', 'subadmin') %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin_panel') }}">⚙️ Админка</a>
-                        </li>
+
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link"
+                                    href="{{ url_for('admin_panel') }}"
+                                    title="Панель администратора"
+                                >
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                    <span>
+                                        Админка
+                                    </span>
+
+                                </a>
+
+                            </li>
+
                         {% endif %}
+
+
+                        <!-- LOGOUT -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
+
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('logout') }}"
+                            >
+
+                                <i class="bi bi-box-arrow-right"></i>
+
+                                <span>
+                                    Выйти
+                                </span>
+
+                            </a>
+
                         </li>
+
+
                     {% else %}
+
+                        <!-- LOGIN -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">Войти</a>
+
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('login') }}"
+                            >
+
+                                <i class="bi bi-box-arrow-in-right"></i>
+
+                                Войти
+
+                            </a>
+
                         </li>
+
+
+                        <!-- REGISTER -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('register') }}">Регистрация</a>
+
+                            <a
+                                class="nav-link"
+                                href="{{ url_for('register') }}"
+                            >
+
+                                <i class="bi bi-person-plus"></i>
+
+                                Регистрация
+
+                            </a>
+
                         </li>
+
                     {% endif %}
+
                 </ul>
+
             </div>
+
         </div>
+
     </nav>
 
+
+    <!-- =========================================================
+         FLASH MESSAGES
+    ========================================================= -->
+
     <div class="container mt-3">
+
         {% with messages = get_flashed_messages() %}
+
             {% if messages %}
+
                 {% for msg in messages %}
-                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+
+                    <div
+                        class="alert alert-info alert-dismissible fade show"
+                        role="alert"
+                    >
+
+                        <i class="bi bi-info-circle me-2"></i>
+
                         {{ msg }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Закрыть"
+                        ></button>
+
                     </div>
+
                 {% endfor %}
+
             {% endif %}
+
         {% endwith %}
+
     </div>
 
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================= -->
+
     <main class="container mt-4">
-        {% block content %}{% endblock %}
+
+        {% block content %}
+
+        {% endblock %}
+
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {% block scripts %}{% endblock %}
+
+    <!-- =========================================================
+         BOOTSTRAP JS
+    ========================================================= -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+
+    <!-- PAGE SCRIPTS -->
+
+    {% block scripts %}
+
+    {% endblock %}
+
 </body>
 </html>
