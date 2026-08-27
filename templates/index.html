@@ -1,984 +1,244 @@
 {% extends "base.html" %}
-
-{% block title %}Главная — SpendIt{% endblock %}
+{% block title %}Главная{% endblock %}
 
 {% block content %}
 
-<style>
-    /* =========================================================
-       HERO
-    ========================================================= */
-
-    .home-hero {
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 28px;
-        padding: 42px 36px;
-        border-radius: 24px;
-        background:
-            radial-gradient(circle at 85% 20%, rgba(99, 102, 241, .20), transparent 30%),
-            radial-gradient(circle at 15% 80%, rgba(16, 185, 129, .12), transparent 28%),
-            linear-gradient(135deg, #111827 0%, #1e293b 55%, #172554 100%);
-        color: #fff;
-        box-shadow: 0 20px 45px rgba(15, 23, 42, .18);
-    }
-
-    .home-hero::before {
-        content: "";
-        position: absolute;
-        width: 260px;
-        height: 260px;
-        right: -90px;
-        top: -100px;
-        border-radius: 50%;
-        border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .home-hero::after {
-        content: "";
-        position: absolute;
-        width: 180px;
-        height: 180px;
-        right: 70px;
-        bottom: -120px;
-        border-radius: 50%;
-        border: 1px solid rgba(255,255,255,.06);
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 2;
-        max-width: 760px;
-    }
-
-    .hero-label {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 14px;
-        padding: 7px 12px;
-        border: 1px solid rgba(255,255,255,.12);
-        border-radius: 999px;
-        background: rgba(255,255,255,.06);
-        color: #c7d2fe;
-        font-size: .78rem;
-        font-weight: 700;
-        letter-spacing: .04em;
-        text-transform: uppercase;
-    }
-
-    .hero-label::before {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #818cf8;
-        box-shadow: 0 0 12px rgba(129,140,248,.8);
-    }
-
-    .home-hero h1 {
-        margin: 0 0 12px;
-        color: #fff;
-        font-size: clamp(2rem, 4vw, 3.2rem);
-        font-weight: 800;
-        line-height: 1.05;
-        letter-spacing: -1.5px;
-    }
-
-    .home-hero p {
-        max-width: 620px;
-        margin: 0;
-        color: #cbd5e1;
-        font-size: 1rem;
-    }
-
-
-    /* =========================================================
-       SEARCH / BUDGET
-    ========================================================= */
-
-    .budget-box {
-        margin-bottom: 26px;
-        padding: 20px;
-        border: 1px solid #e5e7eb;
-        border-radius: 18px;
-        background: rgba(255,255,255,.96);
-        box-shadow: 0 8px 30px rgba(15,23,42,.06);
-    }
-
-    .budget-title {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 12px;
-        font-size: .95rem;
-        font-weight: 700;
-        color: #111827;
-    }
-
-    .budget-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 34px;
-        height: 34px;
-        border-radius: 10px;
-        background: #eef2ff;
-        color: #4f46e5;
-    }
-
-    .budget-input-group {
-        display: flex;
-        gap: 10px;
-    }
-
-    .budget-input {
-        height: 48px;
-        border-radius: 12px !important;
-        font-size: .95rem;
-    }
-
-    .budget-button {
-        min-width: 130px;
-        height: 48px;
-        border-radius: 12px !important;
-        font-weight: 700;
-    }
-
-    .budget-help {
-        display: block;
-        margin-top: 8px;
-        color: #94a3b8;
-        font-size: .78rem;
-    }
-
-
-    /* =========================================================
-       FILTERS
-    ========================================================= */
-
-    .filters-card {
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-        border-radius: 18px;
-        background: #fff;
-        box-shadow: 0 8px 24px rgba(15,23,42,.05);
-    }
-
-    .filters-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px 16px;
-        border-bottom: 1px solid #eef0f3;
-        background: #fafafa;
-    }
-
-    .filters-header strong {
-        font-size: .9rem;
-        color: #111827;
-    }
-
-    .filters-header i {
-        color: #6366f1;
-    }
-
-    .filters-body {
-        padding: 14px;
-    }
-
-    .category-list {
-        max-height: 390px;
-        overflow-y: auto;
-        padding-right: 4px;
-    }
-
-    .category-list::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    .category-list::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .category-list::-webkit-scrollbar-thumb {
-        background: #d1d5db;
-        border-radius: 20px;
-    }
-
-    .category-item {
-        margin-bottom: 7px;
-    }
-
-    .category-item:last-child {
-        margin-bottom: 0;
-    }
-
-    .category-item .form-check-input {
-        width: 17px;
-        height: 17px;
-        margin-top: .18rem;
-        border-color: #cbd5e1;
-        cursor: pointer;
-    }
-
-    .category-item .form-check-input:checked {
-        background-color: #4f46e5;
-        border-color: #4f46e5;
-    }
-
-    .category-item .form-check-label {
-        width: 100%;
-        padding-left: 4px;
-        color: #475569;
-        font-size: .86rem;
-        cursor: pointer;
-    }
-
-    .category-item:hover .form-check-label {
-        color: #4f46e5;
-    }
-
-    .filter-hint {
-        display: block;
-        margin-top: 12px;
-        color: #94a3b8;
-        font-size: .73rem;
-        line-height: 1.45;
-    }
-
-
-    /* =========================================================
-       SORT
-    ========================================================= */
-
-    .sort-select {
-        height: 44px;
-        border-radius: 10px !important;
-        font-size: .85rem;
-        font-weight: 600;
-    }
-
-
-    /* =========================================================
-       PERSONALIZED
-    ========================================================= */
-
-    .personal-card {
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 18px;
-        border: 1px solid #ddd6fe;
-        border-radius: 16px;
-        background:
-            linear-gradient(135deg, #faf9ff 0%, #ffffff 65%);
-        box-shadow: 0 7px 22px rgba(79,70,229,.06);
-    }
-
-    .personal-card::after {
-        content: "";
-        position: absolute;
-        width: 130px;
-        height: 130px;
-        right: -55px;
-        top: -55px;
-        border-radius: 50%;
-        background: rgba(99,102,241,.06);
-    }
-
-    .personal-body {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        padding: 14px 17px;
-    }
-
-    .personal-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 3px;
-        color: #312e81;
-        font-size: .9rem;
-        font-weight: 800;
-    }
-
-    .personal-title i {
-        color: #6366f1;
-    }
-
-    .personal-description {
-        color: #64748b;
-        font-size: .78rem;
-    }
-
-    .personal-switch {
-        flex-shrink: 0;
-    }
-
-    .personal-switch .form-check-input {
-        width: 3rem !important;
-        height: 1.65rem !important;
-        margin: 0 !important;
-        cursor: pointer;
-    }
-
-    .personal-switch .form-check-input:checked {
-        background-color: #4f46e5;
-        border-color: #4f46e5;
-    }
-
-
-    /* =========================================================
-       PRODUCTS HEADER
-    ========================================================= */
-
-    .products-heading {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 15px;
-        margin-bottom: 14px;
-    }
-
-    .products-heading h2 {
-        margin: 0;
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: #111827;
-        letter-spacing: -.4px;
-    }
-
-    .products-heading p {
-        margin: 3px 0 0;
-        color: #94a3b8;
-        font-size: .78rem;
-    }
-
-
-    /* =========================================================
-       PRODUCT CARDS
-    ========================================================= */
-
-    .product-card {
-        position: relative;
-        height: 100%;
-        overflow: hidden;
-        border: 1px solid #e8eaee !important;
-        border-radius: 17px !important;
-        background: #fff;
-        box-shadow: 0 5px 18px rgba(15,23,42,.045) !important;
-        cursor: pointer;
-        transition:
-            transform .22s ease,
-            box-shadow .22s ease,
-            border-color .22s ease;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-        border-color: #d9dcff !important;
-        box-shadow: 0 16px 35px rgba(15,23,42,.11) !important;
-    }
-
-    .product-image-wrap {
-        position: relative;
-        overflow: hidden;
-        height: 205px;
-        background: #f8fafc;
-    }
-
-    .product-card .card-img-top {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border: 0;
-        transition: transform .35s ease;
-    }
-
-    .product-card:hover .card-img-top {
-        transform: scale(1.045);
-    }
-
-    .product-image-overlay {
-        position: absolute;
-        inset: auto 0 0 0;
-        height: 70px;
-        background: linear-gradient(to top, rgba(0,0,0,.18), transparent);
-        pointer-events: none;
-    }
-
-    .product-card .card-body {
-        display: flex;
-        flex-direction: column;
-        padding: 15px;
-    }
-
-    .product-category {
-        margin-bottom: 5px;
-        color: #818cf8;
-        font-size: .7rem;
-        font-weight: 700;
-        letter-spacing: .02em;
-        text-transform: uppercase;
-    }
-
-    .product-card .card-title {
-        display: -webkit-box;
-        overflow: hidden;
-        min-height: 42px;
-        margin-bottom: 5px;
-        color: #111827;
-        font-size: .95rem;
-        font-weight: 700;
-        line-height: 1.4;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-    }
-
-    .product-description {
-        display: -webkit-box;
-        overflow: hidden;
-        min-height: 40px;
-        margin-bottom: 12px;
-        color: #64748b;
-        font-size: .78rem;
-        line-height: 1.5;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-    }
-
-    .price-block {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: baseline;
-        gap: 6px;
-        margin-bottom: 13px;
-    }
-
-    .old-price {
-        color: #94a3b8 !important;
-        font-size: .74rem;
-    }
-
-    .current-price {
-        color: #dc2626;
-        font-size: 1.2rem;
-        font-weight: 800;
-        letter-spacing: -.4px;
-    }
-
-    .buy-button {
-        width: 100%;
-        min-height: 42px;
-        border: 0 !important;
-        border-radius: 10px !important;
-        background: #111827 !important;
-        font-size: .82rem;
-        font-weight: 700;
-        transition: background .2s ease, transform .2s ease;
-    }
-
-    .buy-button:hover {
-        background: #4f46e5 !important;
-        transform: translateY(-1px);
-    }
-
-    .buy-button i {
-        margin-right: 5px;
-    }
-
-
-    /* =========================================================
-       EMPTY STATE
-    ========================================================= */
-
-    .empty-state {
-        padding: 45px 25px;
-        border: 1px dashed #cbd5e1;
-        border-radius: 18px;
-        background: #fff;
-        text-align: center;
-    }
-
-    .empty-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 58px;
-        height: 58px;
-        margin: 0 auto 15px;
-        border-radius: 16px;
-        background: #f1f5f9;
-        color: #64748b;
-        font-size: 1.5rem;
-    }
-
-    .empty-state h3 {
-        margin-bottom: 6px;
-        font-size: 1rem;
-        font-weight: 800;
-    }
-
-    .empty-state p {
-        margin: 0;
-        color: #94a3b8;
-        font-size: .82rem;
-    }
-
-
-    /* =========================================================
-       MODAL
-    ========================================================= */
-
-    #buyModal .modal-dialog {
-        max-width: 520px;
-    }
-
-    #buyModal .modal-content {
-        overflow: hidden;
-        border: 0;
-        border-radius: 22px;
-        box-shadow: 0 25px 70px rgba(15,23,42,.25);
-    }
-
-    #buyModal .modal-header {
-        padding: 18px 20px;
-        border-bottom: 1px solid #eef0f3;
-        background: #fff;
-    }
-
-    #buyModal .modal-title {
-        font-size: 1rem;
-        font-weight: 800;
-    }
-
-    #buyModal .modal-body {
-        padding: 20px;
-    }
-
-    #buyModal .modal-footer {
-        padding: 15px 20px;
-        border-top: 1px solid #eef0f3;
-        background: #fafafa;
-    }
-
-    .modal-product {
-        padding: 14px;
-        border: 1px solid #eef0f3;
-        border-radius: 15px;
-        background: #fafafa;
-    }
-
-    #modalProductImage {
-        width: 100%;
-        max-height: 190px;
-        object-fit: cover;
-        border-radius: 12px;
-    }
-
-    #modalProductName {
-        margin-top: 12px;
-        margin-bottom: 3px;
-        font-size: 1rem;
-        font-weight: 800;
-    }
-
-    #modalProductCategory {
-        margin-bottom: 5px;
-        font-size: .75rem;
-    }
-
-    #modalProductPrice {
-        margin: 0;
-        color: #16a34a !important;
-        font-size: 1.2rem;
-        font-weight: 800;
-    }
-
-    .payment-title {
-        margin-bottom: 10px;
-        font-size: .85rem;
-        font-weight: 800;
-        color: #111827;
-    }
-
-    .payment-option {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 12px;
-        margin-bottom: 7px;
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: border-color .15s, background .15s;
-    }
-
-    .payment-option:hover {
-        border-color: #c7d2fe;
-        background: #fafaff;
-    }
-
-    .payment-option .form-check-input {
-        margin: 0;
-    }
-
-    .payment-option label {
-        cursor: pointer;
-        font-size: .82rem;
-        font-weight: 600;
-    }
-
-    .card-fields-box {
-        padding-top: 8px;
-    }
-
-    .modal-input {
-        border-radius: 10px !important;
-        min-height: 43px;
-    }
-
-    .modal-cancel {
-        border-radius: 10px !important;
-        font-weight: 600;
-    }
-
-    .modal-pay {
-        min-width: 125px;
-        border-radius: 10px !important;
-        font-weight: 700;
-    }
-
-    .qr-box {
-        padding: 18px;
-        border: 1px dashed #cbd5e1;
-        border-radius: 14px;
-        background: #f8fafc;
-    }
-
-
-    /* =========================================================
-       RESPONSIVE
-    ========================================================= */
-
-    @media (max-width: 991px) {
-        .home-hero {
-            padding: 32px 26px;
-        }
-
-        .product-image-wrap {
-            height: 185px;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .home-hero {
-            margin-bottom: 18px;
-            padding: 27px 20px;
-            border-radius: 19px;
-        }
-
-        .home-hero h1 {
-            font-size: 1.9rem;
-            letter-spacing: -1px;
-        }
-
-        .home-hero p {
-            font-size: .86rem;
-        }
-
-        .hero-label {
-            margin-bottom: 10px;
-            font-size: .68rem;
-        }
-
-        .budget-box {
-            margin-bottom: 18px;
-            padding: 15px;
-            border-radius: 15px;
-        }
-
-        .budget-input-group {
-            gap: 7px;
-        }
-
-        .budget-button {
-            min-width: 105px;
-        }
-
-        .mobile-filters-row {
-            gap: 8px !important;
-        }
-
-        .mobile-filters-row > div {
-            padding: 0 !important;
-        }
-
-        .filters-card {
-            border-radius: 14px;
-        }
-
-        .filters-header {
-            padding: 12px;
-        }
-
-        .filters-body {
-            padding: 10px;
-        }
-
-        .category-list {
-            max-height: 180px;
-        }
-
-        .category-item .form-check-label {
-            font-size: .76rem;
-        }
-
-        .sort-select {
-            font-size: .76rem;
-        }
-
-        .personal-body {
-            align-items: center;
-            padding: 12px;
-        }
-
-        .personal-description {
-            display: block;
-            max-width: 240px;
-            line-height: 1.35;
-        }
-
-        .products-heading {
-            margin-top: 4px;
-            margin-bottom: 10px;
-        }
-
-        .products-heading h2 {
-            font-size: 1rem;
-        }
-
-        .products-heading p {
-            font-size: .68rem;
-        }
-
-        .product-image-wrap {
-            height: 135px;
-        }
-
-        .product-card .card-body {
-            padding: 10px;
-        }
-
-        .product-card .card-title {
-            min-height: 36px;
-            font-size: .78rem;
-        }
-
-        .product-category {
-            font-size: .59rem;
-        }
-
-        .product-description {
-            display: none;
-        }
-
-        .price-block {
-            margin-bottom: 9px;
-        }
-
-        .old-price {
-            font-size: .62rem;
-        }
-
-        .current-price {
-            font-size: .93rem;
-        }
-
-        .buy-button {
-            min-height: 36px;
-            padding: 5px 8px;
-            font-size: .7rem;
-        }
-
-        .empty-state {
-            padding: 35px 15px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .home-hero h1 {
-            font-size: 1.65rem;
-        }
-
-        .home-hero p {
-            font-size: .8rem;
-        }
-
-        .budget-title {
-            font-size: .84rem;
-        }
-
-        .budget-input {
-            min-width: 0;
-            font-size: .82rem;
-        }
-
-        .budget-button {
-            min-width: 90px;
-            font-size: .78rem;
-        }
-
-        .mobile-filters-row .card-header {
-            font-size: .78rem;
-        }
-
-        .product-image-wrap {
-            height: 115px;
-        }
-
-        .product-card .card-title {
-            font-size: .73rem;
-        }
-
-        .current-price {
-            font-size: .88rem;
-        }
-
-        .buy-button {
-            font-size: .66rem;
-        }
-    }
-</style>
-
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
-<section class="home-hero">
-    <div class="hero-content">
-
-        <div class="hero-label">
-            Умный выбор
-        </div>
-
-        <h1>
-            Куда потратить деньги?
-        </h1>
-
-        <p>
-            Найдите подходящие товары по бюджету, категории
-            и вашим интересам.
-        </p>
-
+<!-- =========================
+     HERO / ЗАГОЛОВОК
+========================= -->
+<section class="home-header">
+    <div>
+        <span class="home-eyebrow">КАТАЛОГ ПРЕДЛОЖЕНИЙ</span>
+        <h1>Куда потратить деньги</h1>
+        <p>Найдите подходящее предложение под ваш бюджет</p>
     </div>
 </section>
 
 
-<!-- =========================================================
-     BUDGET
-========================================================= -->
-
+<!-- =========================
+     ПОИСК ПО БЮДЖЕТУ
+========================= -->
 <form method="get" action="/" id="filterForm">
 
-    <div class="budget-box">
+    <section class="budget-search">
+        <div class="budget-search-inner">
 
-        <div class="budget-title">
-            <span class="budget-icon">
-                <i class="bi bi-wallet2"></i>
+            <div class="budget-input-wrapper">
+                <span class="budget-label">Ваш бюджет</span>
+
+                <div class="budget-input-row">
+                    <div class="budget-input-container">
+                        <input
+                            type="number"
+                            class="form-control budget-input"
+                            id="budget"
+                            name="budget"
+                            placeholder="Введите сумму"
+                            value="{{ budget }}"
+                            min="0"
+                        >
+                        <span class="budget-currency">₽</span>
+                    </div>
+
+                    <button class="btn btn-primary budget-button" type="submit">
+                        <i class="bi bi-search"></i>
+                        <span>Показать</span>
+                    </button>
+                </div>
+
+                <small>
+                    Оставьте поле пустым, чтобы увидеть все предложения
+                </small>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================
+         МОБИЛЬНАЯ ПАНЕЛЬ ФИЛЬТРОВ
+    ========================= -->
+
+    <div class="mobile-filter-bar">
+
+        <button
+            type="button"
+            class="mobile-filter-button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#mobileFilters"
+            aria-controls="mobileFilters"
+        >
+            <span>
+                <i class="bi bi-sliders"></i>
+                Фильтры
             </span>
 
-            Укажите ваш бюджет
-        </div>
-
-        <div class="budget-input-group">
-
-            <input
-                type="number"
-                class="form-control budget-input"
-                id="budget"
-                name="budget"
-                placeholder="Например, 5000"
-                value="{{ budget }}"
-                min="0"
-            >
-
-            <button
-                class="btn btn-primary budget-button"
-                type="submit"
-            >
-                <i class="bi bi-search me-1"></i>
-                Показать
-            </button>
-
-        </div>
-
-        <small class="budget-help">
-            Оставьте поле пустым, чтобы посмотреть все предложения.
-        </small>
+            <i class="bi bi-chevron-right"></i>
+        </button>
 
     </div>
 
 
-    <!-- =====================================================
-         FILTERS + PRODUCTS
-    ===================================================== -->
+    <!-- =========================
+         МОБИЛЬНОЕ BURGER / OFFCANVAS
+    ========================= -->
 
-    <div class="row g-3 mobile-filters-row">
+    <div
+        class="offcanvas offcanvas-start mobile-filters"
+        tabindex="-1"
+        id="mobileFilters"
+        aria-labelledby="mobileFiltersLabel"
+    >
 
-        <!-- =================================================
-             CATEGORIES
-        ================================================== -->
+        <div class="offcanvas-header">
 
-        <div class="col-md-2 col-6">
+            <div>
+                <span class="filter-eyebrow">НАСТРОЙКИ</span>
+                <h5 id="mobileFiltersLabel">Фильтры</h5>
+            </div>
 
-            <div class="filters-card">
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Закрыть"
+            ></button>
 
-                <div class="filters-header">
-                    <strong>
-                        <i class="bi bi-grid me-1"></i>
-                        Категории
-                    </strong>
+        </div>
+
+
+        <div class="offcanvas-body">
+
+            <!-- КАТЕГОРИИ -->
+            <div class="mobile-filter-section">
+
+                <div class="filter-section-title">
+                    <span>Категории</span>
+
+                    <span class="filter-count">
+                        {{ selected_categories|length if selected_categories else 0 }}
+                    </span>
                 </div>
 
-                <div class="filters-body">
+                <div class="mobile-category-list">
 
-                    <div class="category-list">
+                    {% for cat in categories %}
 
-                        {% for cat in categories %}
+                    <label class="mobile-category-item">
 
-                        <div class="form-check category-item">
+                        <input
+                            class="form-check-input category-checkbox-mobile"
+                            type="checkbox"
+                            name="category_mobile"
+                            value="{{ cat }}"
+                            data-category="{{ cat }}"
+                            {% if cat in selected_categories %}checked{% endif %}
+                        >
 
-                            <input
-                                class="form-check-input category-checkbox"
-                                type="checkbox"
-                                name="category"
-                                value="{{ cat }}"
-                                id="cat_{{ loop.index }}"
-                                {% if cat in selected_categories %}checked{% endif %}
-                            >
+                        <span class="category-checkbox-custom">
+                            <i class="bi bi-check"></i>
+                        </span>
 
-                            <label
-                                class="form-check-label"
-                                for="cat_{{ loop.index }}"
-                            >
-                                {{ cat }}
-                            </label>
+                        <span class="category-name">
+                            {{ cat }}
+                        </span>
 
-                        </div>
+                    </label>
 
-                        {% endfor %}
+                    {% endfor %}
 
-                    </div>
+                </div>
 
-                    <small class="filter-hint">
-                        Если ничего не выбрано — показываются все категории.
-                    </small>
+                <p class="filter-hint">
+                    Если ничего не выбрано — показываются все категории
+                </p>
+
+            </div>
+
+
+            <!-- СОРТИРОВКА -->
+            <div class="mobile-filter-section">
+
+                <div class="filter-section-title">
+                    <span>Сортировка</span>
+                </div>
+
+                <div class="sort-options">
+
+                    <label class="sort-option">
+
+                        <input
+                            type="radio"
+                            name="mobile_sort"
+                            value="price_asc"
+                            {% if sort_option == 'price_asc' %}checked{% endif %}
+                        >
+
+                        <span class="sort-radio"></span>
+
+                        <span>
+                            <strong>Цена</strong>
+                            <small>От дешёвых к дорогим</small>
+                        </span>
+
+                    </label>
+
+
+                    <label class="sort-option">
+
+                        <input
+                            type="radio"
+                            name="mobile_sort"
+                            value="price_desc"
+                            {% if sort_option == 'price_desc' %}checked{% endif %}
+                        >
+
+                        <span class="sort-radio"></span>
+
+                        <span>
+                            <strong>Цена</strong>
+                            <small>От дорогих к дешёвым</small>
+                        </span>
+
+                    </label>
+
+
+                    <label class="sort-option">
+
+                        <input
+                            type="radio"
+                            name="mobile_sort"
+                            value="name_asc"
+                            {% if sort_option == 'name_asc' %}checked{% endif %}
+                        >
+
+                        <span class="sort-radio"></span>
+
+                        <span>
+                            <strong>Название</strong>
+                            <small>От А до Я</small>
+                        </span>
+
+                    </label>
+
+
+                    <label class="sort-option">
+
+                        <input
+                            type="radio"
+                            name="mobile_sort"
+                            value="name_desc"
+                            {% if sort_option == 'name_desc' %}checked{% endif %}
+                        >
+
+                        <span class="sort-radio"></span>
+
+                        <span>
+                            <strong>Название</strong>
+                            <small>От Я до А</small>
+                        </span>
+
+                    </label>
 
                 </div>
 
@@ -987,53 +247,126 @@
         </div>
 
 
-        <!-- =================================================
-             SORT + PRODUCTS
-        ================================================== -->
+        <!-- FOOTER -->
+        <div class="mobile-filter-footer">
 
-        <div class="col-md-8 col-12">
+            <button
+                type="button"
+                class="btn btn-light filter-reset"
+                id="mobileResetFilters"
+            >
+                Сбросить
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-primary filter-apply"
+                id="mobileApplyFilters"
+            >
+                Применить
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         DESKTOP FILTERS + PRODUCTS
+    ========================= -->
+
+    <div class="catalog-layout">
+
+
+        <!-- ДЕСКТОП КАТЕГОРИИ -->
+
+        <aside class="desktop-filter categories-filter">
+
+            <div class="filter-card">
+
+                <div class="filter-card-header">
+                    <div>
+                        <span class="filter-eyebrow">ФИЛЬТР</span>
+                        <h6>Категории</h6>
+                    </div>
+
+                    <i class="bi bi-grid"></i>
+                </div>
+
+                <div class="filter-card-body">
+
+                    {% for cat in categories %}
+
+                    <label class="desktop-category">
+
+                        <input
+                            class="form-check-input category-checkbox"
+                            type="checkbox"
+                            name="category"
+                            value="{{ cat }}"
+                            id="cat_{{ loop.index }}"
+                            {% if cat in selected_categories %}checked{% endif %}
+                        >
+
+                        <span class="desktop-checkbox">
+                            <i class="bi bi-check"></i>
+                        </span>
+
+                        <span>{{ cat }}</span>
+
+                    </label>
+
+                    {% endfor %}
+
+                    <p class="filter-hint">
+                        Если ничего не выбрано — все категории
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =========================
+             ЦЕНТР
+        ========================= -->
+
+        <main class="products-area">
+
+
+            <!-- ПЕРСОНАЛЬНЫЕ РЕКОМЕНДАЦИИ -->
 
             {% if current_user.quiz_done %}
 
-            <!-- PERSONALIZED -->
+            <div class="recommendation-card">
 
-            <div class="personal-card">
+                <div class="recommendation-icon">
+                    <i class="bi bi-stars"></i>
+                </div>
 
-                <div class="personal-body">
+                <div class="recommendation-content">
 
-                    <div>
+                    <strong>Персональные рекомендации</strong>
 
-                        <div class="personal-title">
-                            <i class="bi bi-stars"></i>
-                            Персональные рекомендации
-                        </div>
+                    <span>
+                        Под ваш бюджет
+                        (~{{ rec_budget if rec_budget else ((current_user.income / 15 + current_user.income / 30) / 2) | int }} ₽)
+                        и интересы
+                    </span>
 
-                        <div class="personal-description">
+                </div>
 
-                            Под ваш бюджет
-                            (~{{ rec_budget if rec_budget else ((current_user.income / 15 + current_user.income / 30) / 2) | int }} ₽)
-                            и интересы
+                <div class="form-check form-switch recommendation-switch">
 
-                        </div>
-
-                    </div>
-
-                    <div class="form-check form-switch personal-switch">
-
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="personalToggle"
-                            {% if personalized %}checked{% endif %}
-                            onchange="togglePersonalized(this)"
-                        >
-
-                        <label
-                            class="form-check-label"
-                            for="personalToggle"
-                        ></label>
-
-                    </div>
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="personalToggle"
+                        {% if personalized %}checked{% endif %}
+                        onchange="togglePersonalized(this)"
+                    >
 
                 </div>
 
@@ -1042,184 +375,115 @@
             {% endif %}
 
 
-            <!-- SORT -->
+            <!-- =========================
+                 ТОВАРЫ
+            ========================= -->
 
-            <div class="filters-card mb-3">
+            {% if offers %}
 
-                <div class="filters-body">
+            <div class="products-header">
 
-                    <div class="row align-items-center g-2">
-
-                        <div class="col">
-
-                            <div class="products-heading mb-0">
-
-                                <div>
-                                    <h2>
-                                        Предложения
-                                    </h2>
-
-                                    <p>
-                                        Выберите подходящий вариант
-                                    </p>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-auto">
-
-                            <select
-                                class="form-select sort-select"
-                                id="sort"
-                                name="sort"
-                            >
-
-                                <option
-                                    value="price_asc"
-                                    {% if sort_option == 'price_asc' %}selected{% endif %}
-                                >
-                                    Цена ↑
-                                </option>
-
-                                <option
-                                    value="price_desc"
-                                    {% if sort_option == 'price_desc' %}selected{% endif %}
-                                >
-                                    Цена ↓
-                                </option>
-
-                                <option
-                                    value="name_asc"
-                                    {% if sort_option == 'name_asc' %}selected{% endif %}
-                                >
-                                    Название А→Я
-                                </option>
-
-                                <option
-                                    value="name_desc"
-                                    {% if sort_option == 'name_desc' %}selected{% endif %}
-                                >
-                                    Название Я→А
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
+                <div>
+                    <span class="products-eyebrow">ПРЕДЛОЖЕНИЯ</span>
+                    <h2>Подходящие варианты</h2>
                 </div>
+
+                <span class="products-count">
+                    {{ offers|length }} предложений
+                </span>
 
             </div>
 
 
-            <!-- =================================================
-                 PRODUCTS
-            ================================================== -->
-
-            {% if offers %}
-
-            <div class="row g-2">
+            <div class="products-grid">
 
                 {% for offer in offers %}
 
-                <div class="col-lg-4 col-md-6 col-6">
+                <article
+                    class="product-card"
+                    onclick="location.href='/product/{{ offer.id }}'"
+                >
 
-                    <div
-                        class="card product-card"
-                        onclick="location.href='/product/{{ offer.id }}'"
-                    >
+                    <div class="product-image-wrapper">
 
-                        <!-- IMAGE -->
+                        <img
+                            src="{{ offer.image }}"
+                            class="product-image"
+                            alt="{{ offer.name }}"
+                            loading="lazy"
+                        >
 
-                        <div class="product-image-wrap">
+                        {% if offer.original_price %}
 
-                            <img
-                                src="{{ offer.image }}"
-                                class="card-img-top"
-                                alt="{{ offer.name }}"
-                                loading="lazy"
-                            >
+                        <span class="discount-badge">
+                            Скидка
+                        </span>
 
-                            <div class="product-image-overlay"></div>
+                        {% endif %}
 
+                    </div>
+
+
+                    <div class="product-body">
+
+                        <div class="product-category">
+                            {{ offer.category }}
                         </div>
 
+                        <h3 class="product-title">
+                            {{ offer.name }}
+                        </h3>
 
-                        <!-- BODY -->
-
-                        <div class="card-body">
-
-                            <div class="product-category">
-                                {{ offer.category }}
-                            </div>
-
-                            <h5 class="card-title">
-                                {{ offer.name }}
-                            </h5>
+                        <p class="product-description">
+                            {{ offer.desc }}
+                        </p>
 
 
-                            <p class="product-description">
-                                {{ offer.desc }}
-                            </p>
+                        <div class="product-bottom">
 
-
-                            <!-- PRICE -->
-
-                            <div class="price-block">
+                            <div class="product-price">
 
                                 {% if offer.original_price %}
 
-                                <span class="old-price text-decoration-line-through">
+                                <span class="product-old-price">
                                     {{ offer.original_price }} ₽
                                 </span>
 
                                 {% endif %}
 
-                                <span class="current-price">
+                                <span class="product-current-price">
                                     {{ offer.price }} ₽
                                 </span>
 
                             </div>
 
 
-                            <!-- BUY -->
-
                             <button
-                                type="button"
-                                class="btn btn-success buy-button mt-auto"
+                                class="btn btn-success product-buy"
                                 data-bs-toggle="modal"
                                 data-bs-target="#buyModal"
-
                                 data-product="{{ offer.name }}"
                                 data-price="{{ offer.price }}"
                                 data-image="{{ offer.image }}"
                                 data-category="{{ offer.category }}"
                                 data-product-id="{{ offer.id }}"
-
                                 onclick="event.stopPropagation();"
                             >
-
-                                <i class="bi bi-bag-check"></i>
                                 Купить
-
                             </button>
 
                         </div>
 
                     </div>
 
-                </div>
+                </article>
 
                 {% endfor %}
 
             </div>
 
-            {% else %}
 
-            <!-- EMPTY -->
+            {% else %}
 
             <div class="empty-state">
 
@@ -1227,71 +491,72 @@
                     <i class="bi bi-search"></i>
                 </div>
 
-                <h3>
-                    Ничего не найдено
-                </h3>
+                <h3>Ничего не найдено</h3>
 
                 <p>
-                    Попробуйте изменить фильтры или увеличить бюджет.
+                    Попробуйте изменить категории или увеличить бюджет.
                 </p>
 
             </div>
 
             {% endif %}
 
-        </div>
+        </main>
 
 
-        <!-- =================================================
-             SORT SIDEBAR
-        ================================================== -->
+        <!-- =========================
+             DESKTOP СОРТИРОВКА
+        ========================= -->
 
-        <div class="col-md-2 col-6 order-md-last">
+        <aside class="desktop-filter sorting-filter">
 
-            <div class="filters-card">
+            <div class="filter-card">
 
-                <div class="filters-header">
+                <div class="filter-card-header">
 
-                    <strong>
-                        <i class="bi bi-sliders me-1"></i>
-                        Сортировка
-                    </strong>
+                    <div>
+                        <span class="filter-eyebrow">ПОРЯДОК</span>
+                        <h6>Сортировка</h6>
+                    </div>
+
+                    <i class="bi bi-arrow-down-up"></i>
 
                 </div>
 
-                <div class="filters-body">
+                <div class="filter-card-body">
 
                     <select
-                        class="form-select sort-select"
-                        id="sortMobile"
+                        class="form-select desktop-sort"
+                        id="sort"
+                        name="sort"
                     >
 
                         <option
                             value="price_asc"
                             {% if sort_option == 'price_asc' %}selected{% endif %}
                         >
-                            Цена ↑
+                            Цена — сначала дешёвые
                         </option>
 
                         <option
                             value="price_desc"
                             {% if sort_option == 'price_desc' %}selected{% endif %}
                         >
-                            Цена ↓
+                            Цена — сначала дорогие
                         </option>
 
                         <option
                             value="name_asc"
                             {% if sort_option == 'name_asc' %}selected{% endif %}
                         >
-                            А → Я
+                            Название — А → Я
                         </option>
 
                         <option
                             value="name_desc"
                             {% if sort_option == 'name_desc' %}selected{% endif %}
                         >
-                            Я → А
+                            Название — Я → А
                         </option>
 
                     </select>
@@ -1300,16 +565,16 @@
 
             </div>
 
-        </div>
+        </aside>
 
     </div>
 
 </form>
 
 
-<!-- =========================================================
-     BUY MODAL
-========================================================= -->
+<!-- =========================
+     MODAL ПОКУПКИ
+========================= -->
 
 <div
     class="modal fade"
@@ -1325,12 +590,12 @@
 
             <div class="modal-header">
 
-                <h5
-                    class="modal-title"
-                    id="buyModalLabel"
-                >
-                    Оформление заказа
-                </h5>
+                <div>
+                    <span class="modal-eyebrow">ЗАКАЗ</span>
+                    <h5 class="modal-title" id="buyModalLabel">
+                        Оформление покупки
+                    </h5>
+                </div>
 
                 <button
                     type="button"
@@ -1344,9 +609,7 @@
 
             <div class="modal-body">
 
-                <!-- PRODUCT -->
-
-                <div class="modal-product text-center">
+                <div class="modal-product">
 
                     <img
                         id="modalProductImage"
@@ -1354,69 +617,69 @@
                         alt=""
                     >
 
-                    <h5 id="modalProductName"></h5>
+                    <div>
 
-                    <p
-                        class="text-muted"
-                        id="modalProductCategory"
-                    ></p>
+                        <h5 id="modalProductName"></h5>
 
-                    <h4 id="modalProductPrice"></h4>
+                        <p id="modalProductCategory"></p>
 
-                </div>
+                        <strong id="modalProductPrice"></strong>
 
-
-                <hr class="my-4">
-
-
-                <!-- PAYMENT -->
-
-                <div class="payment-title">
-                    Способ оплаты
-                </div>
-
-
-                <div class="payment-option">
-
-                    <input
-                        class="form-check-input"
-                        type="radio"
-                        name="paymentMethod"
-                        id="paymentCard"
-                        value="card"
-                        checked
-                    >
-
-                    <label for="paymentCard">
-                        Банковская карта
-                    </label>
+                    </div>
 
                 </div>
 
 
-                <div class="payment-option">
+                <div class="payment-section">
 
-                    <input
-                        class="form-check-input"
-                        type="radio"
-                        name="paymentMethod"
-                        id="paymentSBP"
-                        value="sbp"
-                    >
+                    <span class="payment-title">
+                        Способ оплаты
+                    </span>
 
-                    <label for="paymentSBP">
-                        СБП
-                    </label>
+                    <div class="payment-methods">
+
+                        <label class="payment-method">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="paymentMethod"
+                                id="paymentCard"
+                                value="card"
+                                checked
+                            >
+
+                            <span>
+                                <i class="bi bi-credit-card"></i>
+                                Банковская карта
+                            </span>
+
+                        </label>
+
+
+                        <label class="payment-method">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="paymentMethod"
+                                id="paymentSBP"
+                                value="sbp"
+                            >
+
+                            <span>
+                                <i class="bi bi-qr-code"></i>
+                                СБП
+                            </span>
+
+                        </label>
+
+                    </div>
 
                 </div>
 
 
-                <!-- CARD -->
-
-                <div
-                    id="cardFields"
-                    class="card-fields-box"
-                >
+                <div id="cardFields">
 
                     <div class="mb-3">
 
@@ -1429,7 +692,7 @@
 
                         <input
                             type="text"
-                            class="form-control modal-input"
+                            class="form-control"
                             id="cardNumber"
                             placeholder="0000 0000 0000 0000"
                         >
@@ -1437,7 +700,7 @@
                     </div>
 
 
-                    <div class="row g-2">
+                    <div class="row g-3">
 
                         <div class="col-6">
 
@@ -1450,7 +713,7 @@
 
                             <input
                                 type="text"
-                                class="form-control modal-input"
+                                class="form-control"
                                 id="cardExpiry"
                                 placeholder="MM/YY"
                             >
@@ -1468,8 +731,8 @@
                             </label>
 
                             <input
-                                type="password"
-                                class="form-control modal-input"
+                                type="text"
+                                class="form-control"
                                 id="cardCvv"
                                 placeholder="123"
                             >
@@ -1481,46 +744,35 @@
                 </div>
 
 
-                <!-- SBP -->
-
                 <div
                     id="sbpFields"
-                    style="display: none;"
-                    class="text-center"
+                    style="display:none;"
+                    class="sbp-fields"
                 >
 
-                    <div class="qr-box">
+                    <p>
+                        Отсканируйте QR-код в приложении банка
+                    </p>
 
-                        <p class="mb-3">
-                            Отсканируйте QR-код
-                            в приложении вашего банка.
-                        </p>
+                    <img
+                        src="https://via.placeholder.com/150x150?text=QR"
+                        alt="QR-код"
+                    >
 
-                        <img
-                            src="https://via.placeholder.com/180x180?text=QR"
-                            alt="QR-код"
-                            class="img-fluid rounded border"
-                        >
-
-                        <p class="text-muted small mt-3 mb-0">
-                            Или подтвердите платёж
-                            в банковском приложении.
-                        </p>
-
-                    </div>
+                    <small>
+                        Или подтвердите платёж в приложении
+                    </small>
 
                 </div>
 
             </div>
 
 
-            <!-- FOOTER -->
-
             <div class="modal-footer">
 
                 <button
                     type="button"
-                    class="btn btn-light modal-cancel"
+                    class="btn btn-light"
                     data-bs-dismiss="modal"
                 >
                     Отмена
@@ -1528,7 +780,7 @@
 
                 <button
                     type="button"
-                    class="btn btn-success modal-pay"
+                    class="btn btn-success"
                     id="payButton"
                 >
                     Оплатить
@@ -1542,7 +794,6 @@
 
 </div>
 
-
 {% endblock %}
 
 
@@ -1550,331 +801,322 @@
 
 <script>
 
-    /* =========================================================
-       PERSONALIZED
-    ========================================================= */
+/* =========================================
+   ПЕРСОНАЛЬНЫЕ РЕКОМЕНДАЦИИ
+========================================= */
 
-    function togglePersonalized(checkbox) {
+function togglePersonalized(checkbox) {
 
-        const url = new URL(window.location.href);
+    const url = new URL(window.location.href);
 
-        if (checkbox.checked) {
+    if (checkbox.checked) {
 
-            url.searchParams.set('personalized', '1');
+        url.searchParams.set('personalized', '1');
 
-            url.searchParams.delete('budget');
-            url.searchParams.delete('category');
+        url.searchParams.delete('budget');
+        url.searchParams.delete('category');
 
-            url.searchParams.set('sort', 'price_asc');
+        url.searchParams.set('sort', 'price_asc');
 
-        } else {
+    } else {
 
-            url.searchParams.delete('personalized');
+        url.searchParams.delete('personalized');
+
+    }
+
+    window.location.href = url.toString();
+
+}
+
+
+/* =========================================
+   DESKTOP ФИЛЬТРЫ
+========================================= */
+
+document
+    .querySelectorAll('.category-checkbox')
+    .forEach(cb => {
+
+        cb.addEventListener('change', () => {
+
+            document
+                .getElementById('filterForm')
+                .submit();
+
+        });
+
+    });
+
+
+document
+    .getElementById('sort')
+    .addEventListener('change', function () {
+
+        document
+            .getElementById('filterForm')
+            .submit();
+
+    });
+
+
+/* =========================================
+   МОБИЛЬНЫЕ ФИЛЬТРЫ
+========================================= */
+
+document
+    .getElementById('mobileApplyFilters')
+    .addEventListener('click', function () {
+
+        const form = document.getElementById('filterForm');
+
+        /*
+         * Удаляем старые категории.
+         */
+
+        form
+            .querySelectorAll('input[name="category"]')
+            .forEach(input => input.remove());
+
+
+        /*
+         * Добавляем выбранные мобильные категории.
+         */
+
+        document
+            .querySelectorAll('.category-checkbox-mobile:checked')
+            .forEach(input => {
+
+                const hidden = document.createElement('input');
+
+                hidden.type = 'hidden';
+                hidden.name = 'category';
+                hidden.value = input.dataset.category;
+
+                form.appendChild(hidden);
+
+            });
+
+
+        /*
+         * Мобильная сортировка.
+         */
+
+        const mobileSort = document.querySelector(
+            'input[name="mobile_sort"]:checked'
+        );
+
+        if (mobileSort) {
+
+            document.getElementById('sort').value =
+                mobileSort.value;
 
         }
 
-        window.location.href = url.toString();
-    }
+
+        /*
+         * Закрываем меню.
+         */
+
+        const offcanvasElement =
+            document.getElementById('mobileFilters');
+
+        const offcanvas =
+            bootstrap.Offcanvas.getInstance(offcanvasElement);
+
+        if (offcanvas) {
+            offcanvas.hide();
+        }
 
 
-    /* =========================================================
-       FILTER FORM
-    ========================================================= */
+        /*
+         * Отправляем форму.
+         */
 
-    const filterForm = document.getElementById('filterForm');
+        form.submit();
 
-    if (filterForm) {
-
-        filterForm.addEventListener('submit', function () {
-
-            const url = new URL(this.action);
-
-            url.searchParams.delete('personalized');
-
-            this.action = url.toString();
-
-        });
-
-    }
+    });
 
 
-    /* =========================================================
-       CATEGORY FILTER
-    ========================================================= */
+/* =========================================
+   СБРОС МОБИЛЬНЫХ ФИЛЬТРОВ
+========================================= */
 
-    document
-        .querySelectorAll('.category-checkbox')
-        .forEach(function (checkbox) {
+document
+    .getElementById('mobileResetFilters')
+    .addEventListener('click', function () {
 
-            checkbox.addEventListener('change', function () {
-
-                document
-                    .getElementById('filterForm')
-                    .submit();
-
+        document
+            .querySelectorAll('.category-checkbox-mobile')
+            .forEach(input => {
+                input.checked = false;
             });
 
+
+        document.querySelector(
+            'input[name="mobile_sort"][value="price_asc"]'
+        ).checked = true;
+
+    });
+
+
+/* =========================================
+   ОПЛАТА
+========================================= */
+
+document
+    .querySelectorAll('input[name="paymentMethod"]')
+    .forEach(radio => {
+
+        radio.addEventListener('change', function () {
+
+            document.getElementById('cardFields').style.display =
+                this.value === 'card'
+                    ? 'block'
+                    : 'none';
+
+            document.getElementById('sbpFields').style.display =
+                this.value === 'sbp'
+                    ? 'block'
+                    : 'none';
+
         });
 
+    });
 
-    /* =========================================================
-       SORT
-    ========================================================= */
 
-    const sort = document.getElementById('sort');
+/* =========================================
+   MODAL
+========================================= */
 
-    if (sort) {
+const buyModal =
+    document.getElementById('buyModal');
 
-        sort.addEventListener('change', function () {
 
-            document
-                .getElementById('filterForm')
-                .submit();
+buyModal.addEventListener(
+    'show.bs.modal',
+    function (event) {
 
-        });
+        const button =
+            event.relatedTarget;
+
+        buyModal._relatedTarget =
+            button;
+
+
+        document.getElementById(
+            'modalProductName'
+        ).textContent =
+            button.getAttribute('data-product');
+
+
+        document.getElementById(
+            'modalProductPrice'
+        ).textContent =
+            button.getAttribute('data-price') + ' ₽';
+
+
+        document.getElementById(
+            'modalProductImage'
+        ).src =
+            button.getAttribute('data-image');
+
+
+        document.getElementById(
+            'modalProductCategory'
+        ).textContent =
+            button.getAttribute('data-category');
+
+
+        document.getElementById(
+            'paymentCard'
+        ).checked = true;
+
+
+        document.getElementById(
+            'cardFields'
+        ).style.display = 'block';
+
+
+        document.getElementById(
+            'sbpFields'
+        ).style.display = 'none';
+
+
+        document.getElementById(
+            'cardNumber'
+        ).value = '';
+
+
+        document.getElementById(
+            'cardExpiry'
+        ).value = '';
+
+
+        document.getElementById(
+            'cardCvv'
+        ).value = '';
 
     }
+);
 
 
-    /* =========================================================
-       MOBILE SORT
-    ========================================================= */
+/* =========================================
+   BUY
+========================================= */
 
-    const sortMobile = document.getElementById('sortMobile');
+document
+    .getElementById('payButton')
+    .addEventListener('click', function () {
 
-    if (sortMobile) {
+        const button =
+            buyModal._relatedTarget;
 
-        sortMobile.addEventListener('change', function () {
+        if (!button) return;
 
-            const mainSort = document.getElementById('sort');
+        const productId =
+            button.getAttribute('data-product-id');
 
-            if (mainSort) {
-                mainSort.value = this.value;
-            }
 
-            document
-                .getElementById('filterForm')
-                .submit();
+        fetch(`/buy/${productId}`, {
+            method: 'POST'
+        })
 
-        });
+        .then(response => response.json())
 
-    }
+        .then(data => {
 
-
-    /* =========================================================
-       PAYMENT METHOD
-    ========================================================= */
-
-    document
-        .querySelectorAll('input[name="paymentMethod"]')
-        .forEach(function (radio) {
-
-            radio.addEventListener('change', function () {
-
-                const cardFields =
-                    document.getElementById('cardFields');
-
-                const sbpFields =
-                    document.getElementById('sbpFields');
-
-                if (this.value === 'card') {
-
-                    cardFields.style.display = 'block';
-                    sbpFields.style.display = 'none';
-
-                } else {
-
-                    cardFields.style.display = 'none';
-                    sbpFields.style.display = 'block';
-
-                }
-
-            });
-
-        });
-
-
-    /* =========================================================
-       BUY MODAL
-    ========================================================= */
-
-    const buyModal =
-        document.getElementById('buyModal');
-
-
-    if (buyModal) {
-
-        buyModal.addEventListener(
-            'show.bs.modal',
-            function (event) {
-
-                const button = event.relatedTarget;
-
-                buyModal._relatedTarget = button;
-
-
-                const productName =
-                    button.getAttribute('data-product');
-
-                const productPrice =
-                    button.getAttribute('data-price');
-
-                const productImage =
-                    button.getAttribute('data-image');
-
-                const productCategory =
-                    button.getAttribute('data-category');
-
-
-                document
-                    .getElementById('modalProductName')
-                    .textContent = productName;
-
-
-                document
-                    .getElementById('modalProductPrice')
-                    .textContent =
-                        productPrice + ' ₽';
-
-
-                document
-                    .getElementById('modalProductImage')
-                    .src = productImage;
-
-
-                document
-                    .getElementById('modalProductCategory')
-                    .textContent =
-                        productCategory;
-
-
-                /* Reset payment */
-
-                document
-                    .getElementById('paymentCard')
-                    .checked = true;
-
-
-                document
-                    .getElementById('cardFields')
-                    .style.display = 'block';
-
-
-                document
-                    .getElementById('sbpFields')
-                    .style.display = 'none';
-
-
-                document
-                    .getElementById('cardNumber')
-                    .value = '';
-
-
-                document
-                    .getElementById('cardExpiry')
-                    .value = '';
-
-
-                document
-                    .getElementById('cardCvv')
-                    .value = '';
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       PAYMENT
-    ========================================================= */
-
-    const payButton =
-        document.getElementById('payButton');
-
-
-    if (payButton) {
-
-        payButton.addEventListener('click', function () {
-
-            const button =
-                buyModal._relatedTarget;
-
-
-            if (!button) {
-                return;
-            }
-
-
-            const productId =
-                button.getAttribute('data-product-id');
-
-
-            /* Loading state */
-
-            const originalText =
-                this.innerHTML;
-
-
-            this.disabled = true;
-
-            this.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>Обработка...';
-
-
-            fetch(`/buy/${productId}`, {
-                method: 'POST'
-            })
-
-            .then(response => response.json())
-
-            .then(data => {
-
-                if (data.success) {
-
-                    alert(
-                        'Заказ оформлен! Спасибо за покупку.'
-                    );
-
-
-                    const modal =
-                        bootstrap.Modal.getInstance(
-                            buyModal
-                        );
-
-
-                    modal.hide();
-
-                } else {
-
-                    alert(
-                        'Ошибка: ' + data.message
-                    );
-
-                }
-
-            })
-
-            .catch(() => {
+            if (data.success) {
 
                 alert(
-                    'Ошибка соединения с сервером.'
+                    'Заказ оформлен! Спасибо за покупку.'
                 );
 
-            })
+                const modal =
+                    bootstrap.Modal.getInstance(
+                        buyModal
+                    );
 
-            .finally(() => {
+                modal.hide();
 
-                this.disabled = false;
+            } else {
 
-                this.innerHTML =
-                    originalText;
+                alert(
+                    'Ошибка: ' + data.message
+                );
 
-            });
+            }
+
+        })
+
+        .catch(() => {
+
+            alert(
+                'Ошибка соединения'
+            );
 
         });
 
-    }
+    });
 
 </script>
 
