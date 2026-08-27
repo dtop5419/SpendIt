@@ -1,424 +1,234 @@
-/* =========================================================
-   MOBILE BURGER FILTERS
-   Используется index.html
-========================================================= */
-
-.mobile-filter-bar {
-    display: none;
-}
-
-.mobile-filters {
-    width: min(380px, 88vw) !important;
-    background: #ffffff;
-    border: 0 !important;
-    box-shadow: 15px 0 45px rgba(15, 23, 42, 0.15);
-}
-
-.mobile-filters .offcanvas-header {
-    padding: 20px 20px 16px;
-    border-bottom: 1px solid #eef0f3;
-}
-
-.mobile-filters .offcanvas-header h5 {
-    margin: 3px 0 0;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #111827;
-}
-
-.filter-eyebrow {
-    display: block;
-    color: #6366f1;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-}
-
-.mobile-filters .offcanvas-body {
-    padding: 0;
-}
-
-.mobile-filter-section {
-    padding: 20px;
-    border-bottom: 1px solid #eef0f3;
-}
-
-.filter-section-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-
-    color: #111827;
-    font-size: 0.95rem;
-    font-weight: 800;
-}
-
-.filter-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 24px;
-    height: 24px;
-    padding: 0 7px;
-
-    border-radius: 999px;
-
-    background: #eef2ff;
-    color: #4f46e5;
-
-    font-size: 0.7rem;
-    font-weight: 800;
-}
-
-.mobile-category-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.mobile-category-item {
-    position: relative;
-
-    display: flex;
-    align-items: center;
-    gap: 11px;
-
-    min-height: 44px;
-    padding: 9px 11px;
-
-    border: 1px solid #edf0f4;
-    border-radius: 10px;
-
-    background: #ffffff;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.18s ease,
-        border-color 0.18s ease,
-        transform 0.18s ease;
-}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
 
-.mobile-category-item:hover {
-    background: #f8f9ff;
-    border-color: rgba(99, 102, 241, 0.2);
-}
+    <meta charset="UTF-8">
 
-.mobile-category-item input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.category-checkbox-custom {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    width: 20px;
-    height: 20px;
+    <title>
+        {% block title %}Куда потратить деньги{% endblock %}
+    </title>
 
-    flex: 0 0 20px;
 
-    border: 1.5px solid #cbd0d9;
-    border-radius: 6px;
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-    background: #ffffff;
 
-    color: transparent;
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
 
-    transition: all 0.18s ease;
-}
 
-.category-checkbox-custom i {
-    font-size: 0.8rem;
-    font-weight: 800;
-}
+    <!-- Твой основной CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 
-.mobile-category-item
-.category-checkbox-mobile:checked
-~ .category-checkbox-custom {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #ffffff;
-}
 
-.mobile-category-item
-.category-checkbox-mobile:checked
-~ .category-name {
-    color: var(--primary-dark);
-    font-weight: 700;
-}
+    {% block head %}{% endblock %}
 
-.category-name {
-    color: #374151;
-    font-size: 0.88rem;
-    font-weight: 600;
-}
+</head>
 
-.filter-hint {
-    margin: 12px 0 0;
 
-    color: #9ca3af;
+<body>
 
-    font-size: 0.72rem;
-    line-height: 1.45;
-}
 
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
 
-/* =========================================================
-   MOBILE SORT
-========================================================= */
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
 
-.sort-options {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-}
+    <div class="container">
 
-.sort-option {
-    position: relative;
+        <!-- ЛОГО -->
+        <a
+            class="navbar-brand fw-bold"
+            href="/"
+        >
+            <i class="bi bi-wallet2"></i>
+            Куда потратить деньги
+        </a>
 
-    display: flex;
-    align-items: center;
-    gap: 11px;
 
-    min-height: 54px;
-    padding: 9px 11px;
+        <!-- МОБИЛЬНАЯ КНОПКА NAVBAR -->
 
-    border: 1px solid #edf0f4;
-    border-radius: 10px;
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Открыть меню"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    cursor: pointer;
 
-    transition:
-        background-color 0.18s ease,
-        border-color 0.18s ease;
-}
+        <!-- NAVIGATION -->
 
-.sort-option:hover {
-    background: #f8f9ff;
-    border-color: rgba(99, 102, 241, 0.2);
-}
+        <div
+            class="collapse navbar-collapse"
+            id="mainNavbar"
+        >
 
-.sort-option input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
+            <ul class="navbar-nav ms-auto align-items-lg-center">
 
-.sort-radio {
-    width: 19px;
-    height: 19px;
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="/"
+                    >
+                        Главная
+                    </a>
+                </li>
 
-    flex: 0 0 19px;
 
-    border: 2px solid #cbd0d9;
-    border-radius: 50%;
+                {% if current_user.is_authenticated %}
 
-    background: #ffffff;
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="/profile"
+                    >
+                        <i class="bi bi-person"></i>
+                        Профиль
+                    </a>
+                </li>
 
-    position: relative;
 
-    transition: all 0.18s ease;
-}
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="/logout"
+                    >
+                        <i class="bi bi-box-arrow-right"></i>
+                        Выйти
+                    </a>
+                </li>
 
-.sort-option input:checked
-~ .sort-radio {
-    border-color: var(--primary);
-}
+                {% else %}
 
-.sort-option input:checked
-~ .sort-radio::after {
-    content: "";
+                <li class="nav-item">
+                    <a
+                        class="nav-link"
+                        href="/login"
+                    >
+                        Войти
+                    </a>
+                </li>
 
-    position: absolute;
-    top: 4px;
-    left: 4px;
 
-    width: 7px;
-    height: 7px;
+                <li class="nav-item">
+                    <a
+                        class="btn btn-primary ms-lg-2"
+                        href="/register"
+                    >
+                        Регистрация
+                    </a>
+                </li>
 
-    border-radius: 50%;
+                {% endif %}
 
-    background: var(--primary);
-}
+            </ul>
 
-.sort-option > span:last-child {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-}
+        </div>
 
-.sort-option strong {
-    color: #374151;
-    font-size: 0.84rem;
-    font-weight: 700;
-}
+    </div>
 
-.sort-option small {
-    color: #9ca3af;
-    font-size: 0.72rem;
-}
+</nav>
 
 
-/* =========================================================
-   MOBILE FILTER FOOTER
-========================================================= */
+<!-- =========================================================
+     ОСНОВНОЙ КОНТЕНТ
+========================================================= -->
 
-.mobile-filter-footer {
-    display: flex;
-    gap: 9px;
+<main class="main-content">
 
-    padding: 14px 20px;
+    {% block content %}{% endblock %}
 
-    border-top: 1px solid #eef0f3;
+</main>
 
-    background: rgba(250, 251, 252, 0.96);
 
-    position: sticky;
-    bottom: 0;
-}
+<!-- =========================================================
+     FOOTER
+========================================================= -->
 
-.mobile-filter-footer .btn {
-    flex: 1;
-}
+<footer class="site-footer">
 
-.filter-reset {
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    color: #4b5563;
-}
+    <div class="container">
 
-.filter-reset:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
-}
+        <div class="footer-content">
 
+            <div>
+                <strong>
+                    Куда потратить деньги
+                </strong>
 
-/* =========================================================
-   MOBILE ONLY
-========================================================= */
+                <p>
+                    Найдите подходящее предложение под ваш бюджет.
+                </p>
+            </div>
 
-@media (max-width: 767.98px) {
 
-    /*
-       Показываем кнопку фильтров
-    */
+            <div class="footer-links">
 
-    .mobile-filter-bar {
-        display: block;
+                <a href="/">
+                    Главная
+                </a>
 
-        margin-bottom: 14px;
-    }
+                {% if current_user.is_authenticated %}
 
-    .mobile-filter-button {
-        width: 100%;
+                <a href="/profile">
+                    Профиль
+                </a>
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+                {% endif %}
 
-        min-height: 48px;
+            </div>
 
-        padding: 0 15px;
+        </div>
 
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
 
-        background: #ffffff;
+        <div class="footer-bottom">
 
-        color: #374151;
+            <span>
+                © 2026 Куда потратить деньги
+            </span>
 
-        font-size: 0.88rem;
-        font-weight: 700;
+        </div>
 
-        box-shadow:
-            0 2px 8px rgba(15, 23, 42, 0.04);
+    </div>
 
-        transition: all 0.18s ease;
-    }
+</footer>
 
-    .mobile-filter-button:hover {
-        border-color: rgba(99, 102, 241, 0.3);
-        box-shadow:
-            0 5px 15px rgba(15, 23, 42, 0.07);
-    }
 
-    .mobile-filter-button > span {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-    }
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================= -->
 
-    .mobile-filter-button i {
-        color: var(--primary);
-        font-size: 1.05rem;
-    }
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
 
 
-    /*
-       На телефоне скрываем desktop-фильтры
-    */
+<!-- =========================================================
+     ОБЩИЕ SCRIPT
+========================================================= -->
 
-    .desktop-filter {
-        display: none !important;
-    }
+{% block scripts %}{% endblock %}
 
 
-    /*
-       Каталог становится одной колонкой
-    */
-
-    .catalog-layout {
-        display: block !important;
-    }
-
-    .products-area {
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-
-    /*
-       Убираем старое мобильное поведение,
-       которое могло ломать index
-    */
-
-    .mobile-filters-row {
-        display: none !important;
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL PHONES
-========================================================= */
-
-@media (max-width: 480px) {
-
-    .mobile-filter-bar {
-        margin-bottom: 10px;
-    }
-
-    .mobile-filter-button {
-        min-height: 46px;
-        border-radius: 11px;
-    }
-
-    .mobile-filters {
-        width: 90vw !important;
-    }
-
-    .mobile-filter-section {
-        padding: 16px;
-    }
-
-    .mobile-filter-footer {
-        padding: 12px 16px;
-    }
-
-}
+</body>
+</html>
