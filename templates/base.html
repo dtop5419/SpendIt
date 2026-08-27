@@ -1300,7 +1300,7 @@
 
 
         /* =========================================================
-           TABLET
+           TABLET / MOBILE
         ========================================================= */
 
         @media (max-width: 768px) {
@@ -1332,6 +1332,11 @@
                 padding: 1rem;
             }
 
+
+            /* =====================================================
+               MOBILE FILTERS
+            ===================================================== */
+
             .mobile-filters-row {
                 display: flex !important;
 
@@ -1342,31 +1347,212 @@
                 margin-bottom: 16px;
             }
 
-            .mobile-filters-row .col-md-2 {
-                flex: 1;
 
-                width: 50%;
+            .mobile-filters-row .col-md-2 {
+                flex: 1 1 50%;
+
+                width: 50% !important;
 
                 padding: 0 !important;
 
                 margin: 0 !important;
             }
 
+
             .mobile-filters-row .card {
                 margin: 0 !important;
+
+                border-radius: 12px;
+
+                overflow: hidden;
+
+                transition:
+                    box-shadow 0.2s ease,
+                    border-color 0.2s ease;
             }
+
+
+            /* Заголовок фильтра */
 
             .mobile-filters-row .card-header {
-                padding: 8px 10px;
+                position: relative;
 
-                font-size: 0.78rem;
+                display: flex;
+
+                align-items: center;
+
+                justify-content: space-between;
+
+                min-height: 46px;
+
+                padding: 10px 12px;
+
+                cursor: pointer;
+
+                user-select: none;
+
+                background:
+                    linear-gradient(
+                        180deg,
+                        #ffffff,
+                        #fafbfc
+                    );
+
+                border-bottom: 0;
+
+                font-size: 0.8rem;
+
+                color: #374151;
             }
+
+
+            /* Иконка справа */
+
+            .mobile-filters-row .card-header::after {
+                content: "\f282";
+
+                font-family: "bootstrap-icons";
+
+                display: inline-flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                width: 25px;
+                height: 25px;
+
+                border-radius: 7px;
+
+                background: #f3f4ff;
+
+                color: var(--primary);
+
+                font-size: 0.75rem;
+
+                transition:
+                    transform 0.25s ease,
+                    background 0.2s ease;
+            }
+
+
+            /* Тело фильтра скрыто */
 
             .mobile-filters-row .card-body {
-                max-height: 200px !important;
+                display: none;
 
-                padding: 8px !important;
+                max-height: 220px !important;
+
+                overflow-y: auto;
+
+                padding: 10px !important;
+
+                border-top:
+                    1px solid #eef0f3;
+
+                background: #ffffff;
             }
+
+
+            /* Открытый фильтр */
+
+            .mobile-filters-row .card.mobile-filter-open {
+                border-color:
+                    rgba(99,102,241,0.25);
+
+                box-shadow:
+                    0 8px 25px rgba(15,23,42,0.08);
+            }
+
+
+            .mobile-filters-row .card.mobile-filter-open .card-body {
+                display: block;
+            }
+
+
+            .mobile-filters-row .card.mobile-filter-open .card-header {
+                color: var(--primary);
+            }
+
+
+            .mobile-filters-row .card.mobile-filter-open .card-header::after {
+                transform: rotate(180deg);
+
+                background: #e9e9ff;
+            }
+
+
+            /* =====================================================
+               CATEGORY CHECKBOXES
+            ===================================================== */
+
+            .mobile-filters-row .form-check {
+                display: flex;
+
+                align-items: center;
+
+                min-height: 30px;
+
+                margin-bottom: 5px;
+
+                padding-left: 1.6em;
+            }
+
+            .mobile-filters-row .form-check:last-child {
+                margin-bottom: 0;
+            }
+
+            .mobile-filters-row .form-check-input {
+                cursor: pointer;
+
+                margin-top: 0;
+
+                margin-left: -1.6em;
+            }
+
+            .mobile-filters-row .form-check-label {
+                font-size: 0.78rem;
+
+                color: #374151;
+
+                cursor: pointer;
+
+                line-height: 1.3;
+            }
+
+
+            /* =====================================================
+               SORT SELECT
+            ===================================================== */
+
+            .mobile-filters-row .form-select {
+                min-height: 38px;
+
+                padding:
+                    0.45rem 0.65rem;
+
+                font-size: 0.78rem;
+
+                border-radius: 8px;
+            }
+
+
+            /* Подсказка */
+
+            .mobile-filters-row small.text-muted {
+                display: block;
+
+                margin-top: 8px;
+
+                font-size: 0.65rem;
+
+                line-height: 1.3;
+            }
+
+
+            /* =====================================================
+               PRODUCTS
+            ===================================================== */
 
             .col-md-8 {
                 width: 100%;
@@ -1454,6 +1640,47 @@
                 padding-right: 10px;
             }
 
+
+            /* Фильтры на маленьких телефонах */
+
+            .mobile-filters-row {
+                gap: 6px;
+            }
+
+            .mobile-filters-row .card-header {
+                min-height: 42px;
+
+                padding: 8px 9px;
+
+                font-size: 0.72rem;
+            }
+
+            .mobile-filters-row .card-header::after {
+                width: 22px;
+                height: 22px;
+
+                font-size: 0.65rem;
+            }
+
+            .mobile-filters-row .card-body {
+                max-height: 190px !important;
+
+                padding: 8px !important;
+            }
+
+            .mobile-filters-row .form-check-label {
+                font-size: 0.72rem;
+            }
+
+            .mobile-filters-row .form-select {
+                font-size: 0.7rem;
+
+                min-height: 34px;
+            }
+
+
+            /* Товары */
+
             .col-lg-4.col-md-6 {
                 width: 50% !important;
 
@@ -1517,6 +1744,28 @@
 
             .modal-body {
                 padding: 1rem;
+            }
+        }
+
+
+        /* =========================================================
+           DESKTOP FILTERS
+           
+           На ПК всё остаётся раскрытым.
+        ========================================================= */
+
+        @media (min-width: 769px) {
+
+            .mobile-filters-row .card-body {
+                display: block !important;
+            }
+
+            .mobile-filters-row .card-header {
+                cursor: default;
+            }
+
+            .mobile-filters-row .card-header::after {
+                display: none;
             }
         }
 
@@ -1820,7 +2069,83 @@
     ></script>
 
 
-    <!-- PAGE SCRIPTS -->
+    <!-- =========================================================
+         MOBILE FILTER BURGER
+    ========================================================= -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const filterCards = document.querySelectorAll(
+                '.mobile-filters-row > .col-6 .card'
+            );
+
+            filterCards.forEach(function (card) {
+
+                const header = card.querySelector('.card-header');
+
+                if (!header) {
+                    return;
+                }
+
+                header.addEventListener('click', function () {
+
+                    /* Только на мобильных устройствах */
+                    if (window.innerWidth > 768) {
+                        return;
+                    }
+
+                    /* Закрываем все остальные фильтры */
+                    filterCards.forEach(function (otherCard) {
+
+                        if (otherCard !== card) {
+                            otherCard.classList.remove(
+                                'mobile-filter-open'
+                            );
+                        }
+
+                    });
+
+                    /* Переключаем текущий */
+                    card.classList.toggle(
+                        'mobile-filter-open'
+                    );
+
+                });
+
+            });
+
+
+            /* =====================================================
+               Если пользователь переключил ориентацию/размер
+               возвращаем нормальное состояние
+            ===================================================== */
+
+            window.addEventListener('resize', function () {
+
+                if (window.innerWidth > 768) {
+
+                    filterCards.forEach(function (card) {
+
+                        card.classList.remove(
+                            'mobile-filter-open'
+                        );
+
+                    });
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+
+    <!-- =========================================================
+         PAGE SCRIPTS
+    ========================================================= -->
 
     {% block scripts %}
 
