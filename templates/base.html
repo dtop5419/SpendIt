@@ -1,2155 +1,424 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="theme-color" content="#0b0f19">
-    <meta name="description" content="SpendIt — удобный сервис для управления покупками и расходами">
+/* =========================================================
+   MOBILE BURGER FILTERS
+   Используется index.html
+========================================================= */
+
+.mobile-filter-bar {
+    display: none;
+}
+
+.mobile-filters {
+    width: min(380px, 88vw) !important;
+    background: #ffffff;
+    border: 0 !important;
+    box-shadow: 15px 0 45px rgba(15, 23, 42, 0.15);
+}
+
+.mobile-filters .offcanvas-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.mobile-filters .offcanvas-header h5 {
+    margin: 3px 0 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.filter-eyebrow {
+    display: block;
+    color: #6366f1;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.mobile-filters .offcanvas-body {
+    padding: 0;
+}
+
+.mobile-filter-section {
+    padding: 20px;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.filter-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+
+    color: #111827;
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+
+    border-radius: 999px;
+
+    background: #eef2ff;
+    color: #4f46e5;
+
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.mobile-category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mobile-category-item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    min-height: 44px;
+    padding: 9px 11px;
+
+    border: 1px solid #edf0f4;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease;
+}
 
-    <title>{% block title %}Куда потратить деньги?{% endblock %}</title>
-
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-
-    <!-- Bootstrap Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    >
-
-    <!-- Font -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        /* =========================================================
-           ROOT
-        ========================================================= */
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --primary-light: #818cf8;
-
-            --success: #10b981;
-            --success-dark: #059669;
-
-            --danger: #ef4444;
-            --danger-dark: #dc2626;
-
-            --warning: #f59e0b;
-            --warning-dark: #d97706;
-
-            --info: #0ea5e9;
-
-            --dark: #0b0f19;
-            --dark-secondary: #111827;
-            --dark-card: #151b29;
-
-            --text: #111827;
-            --text-secondary: #6b7280;
-            --text-muted: #9ca3af;
-
-            --background: #f4f6fb;
-            --surface: #ffffff;
-            --border: #e5e7eb;
-
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 22px;
-
-            --shadow-sm:
-                0 1px 2px rgba(15, 23, 42, 0.04);
-
-            --shadow-md:
-                0 6px 20px rgba(15, 23, 42, 0.07);
-
-            --shadow-lg:
-                0 15px 40px rgba(15, 23, 42, 0.10);
-
-            --transition:
-                all 0.2s cubic-bezier(.4, 0, .2, 1);
-        }
-
-
-        /* =========================================================
-           RESET
-        ========================================================= */
-
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-
-            font-family:
-                'Inter',
-                -apple-system,
-                BlinkMacSystemFont,
-                'Segoe UI',
-                sans-serif;
-
-            background:
-                radial-gradient(
-                    circle at 10% 0%,
-                    rgba(99, 102, 241, 0.06),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 90% 10%,
-                    rgba(14, 165, 233, 0.04),
-                    transparent 25%
-                ),
-                var(--background);
-
-            color: var(--text);
-            line-height: 1.6;
-
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        ::selection {
-            background: rgba(99, 102, 241, 0.2);
-            color: #111827;
-        }
-
-        img {
-            max-width: 100%;
-        }
-
-        a {
-            color: var(--primary);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        a:hover {
-            color: var(--primary-dark);
-        }
-
-
-        /* =========================================================
-           TYPOGRAPHY
-        ========================================================= */
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-weight: 700;
-            letter-spacing: -0.025em;
-        }
-
-        h1 {
-            font-weight: 800;
-        }
-
-        p {
-            color: var(--text-secondary);
-        }
-
-
-        /* =========================================================
-           NAVBAR
-        ========================================================= */
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1030;
-
-            min-height: 68px;
+.mobile-category-item:hover {
+    background: #f8f9ff;
+    border-color: rgba(99, 102, 241, 0.2);
+}
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #080b12 0%,
-                    #101624 50%,
-                    #0d1320 100%
-                ) !important;
+.mobile-category-item input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.category-checkbox-custom {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    width: 20px;
+    height: 20px;
 
-            box-shadow:
-                0 8px 30px rgba(0, 0, 0, 0.16);
+    flex: 0 0 20px;
 
-            padding: 0.65rem 0;
+    border: 1.5px solid #cbd0d9;
+    border-radius: 6px;
 
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-        }
+    background: #ffffff;
 
-        .navbar::after {
-            content: "";
+    color: transparent;
 
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -1px;
+    transition: all 0.18s ease;
+}
 
-            height: 1px;
+.category-checkbox-custom i {
+    font-size: 0.8rem;
+    font-weight: 800;
+}
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(99, 102, 241, 0.5),
-                    transparent
-                );
+.mobile-category-item
+.category-checkbox-mobile:checked
+~ .category-checkbox-custom {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
 
-            pointer-events: none;
-        }
+.mobile-category-item
+.category-checkbox-mobile:checked
+~ .category-name {
+    color: var(--primary-dark);
+    font-weight: 700;
+}
 
+.category-name {
+    color: #374151;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
 
-        /* =========================================================
-           LOGO
-        ========================================================= */
+.filter-hint {
+    margin: 12px 0 0;
 
-        .navbar-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 11px;
+    color: #9ca3af;
 
-            color: #ffffff !important;
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
 
-            font-size: 1.35rem;
-            font-weight: 800;
 
-            letter-spacing: -0.04em;
+/* =========================================================
+   MOBILE SORT
+========================================================= */
 
-            transition: var(--transition);
-        }
+.sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
 
-        .navbar-brand:hover {
-            color: #ffffff !important;
-            transform: translateY(-1px);
-        }
+.sort-option {
+    position: relative;
 
-        .brand-mark {
-            position: relative;
+    display: flex;
+    align-items: center;
+    gap: 11px;
 
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+    min-height: 54px;
+    padding: 9px 11px;
 
-            width: 36px;
-            height: 36px;
+    border: 1px solid #edf0f4;
+    border-radius: 10px;
 
-            border-radius: 11px;
+    cursor: pointer;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    #8b5cf6
-                );
+    transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease;
+}
 
-            box-shadow:
-                0 5px 18px rgba(99, 102, 241, 0.35);
+.sort-option:hover {
+    background: #f8f9ff;
+    border-color: rgba(99, 102, 241, 0.2);
+}
 
-            color: #ffffff;
+.sort-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
 
-            font-size: 1rem;
-        }
+.sort-radio {
+    width: 19px;
+    height: 19px;
 
-        .brand-mark::after {
-            content: "";
+    flex: 0 0 19px;
 
-            position: absolute;
-            inset: 1px;
+    border: 2px solid #cbd0d9;
+    border-radius: 50%;
 
-            border-radius: 10px;
+    background: #ffffff;
 
-            border: 1px solid rgba(255,255,255,0.18);
+    position: relative;
 
-            pointer-events: none;
-        }
+    transition: all 0.18s ease;
+}
 
-        .brand-text {
-            line-height: 1;
-        }
+.sort-option input:checked
+~ .sort-radio {
+    border-color: var(--primary);
+}
 
+.sort-option input:checked
+~ .sort-radio::after {
+    content: "";
 
-        /* =========================================================
-           NAV LINKS
-        ========================================================= */
+    position: absolute;
+    top: 4px;
+    left: 4px;
 
-        .navbar .nav-link {
-            position: relative;
+    width: 7px;
+    height: 7px;
 
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
+    border-radius: 50%;
 
-            color: #aeb7c8 !important;
+    background: var(--primary);
+}
 
-            font-size: 0.9rem;
-            font-weight: 600;
+.sort-option > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
 
-            padding: 0.6rem 0.75rem !important;
+.sort-option strong {
+    color: #374151;
+    font-size: 0.84rem;
+    font-weight: 700;
+}
 
-            border-radius: 9px;
+.sort-option small {
+    color: #9ca3af;
+    font-size: 0.72rem;
+}
 
-            transition: var(--transition);
-        }
 
-        .navbar .nav-link:hover {
-            color: #ffffff !important;
+/* =========================================================
+   MOBILE FILTER FOOTER
+========================================================= */
 
-            background: rgba(255,255,255,0.06);
+.mobile-filter-footer {
+    display: flex;
+    gap: 9px;
 
-            transform: translateY(-1px);
-        }
+    padding: 14px 20px;
 
-        .navbar .nav-link:active {
-            transform: translateY(0);
-        }
+    border-top: 1px solid #eef0f3;
 
+    background: rgba(250, 251, 252, 0.96);
 
-        /* =========================================================
-           NAV ICONS
-        ========================================================= */
+    position: sticky;
+    bottom: 0;
+}
 
-        .navbar .nav-link i {
-            font-size: 1.05rem;
-            opacity: 0.9;
-        }
+.mobile-filter-footer .btn {
+    flex: 1;
+}
 
+.filter-reset {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    color: #4b5563;
+}
 
-        /* =========================================================
-           USER AREA
-        ========================================================= */
+.filter-reset:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
 
-        .navbar-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
 
-            color: #d5dae4 !important;
+/* =========================================================
+   MOBILE ONLY
+========================================================= */
 
-            font-size: 0.88rem;
-            font-weight: 500;
-        }
+@media (max-width: 767.98px) {
 
-        .navbar-text strong {
-            color: #ffffff;
-        }
+    /*
+       Показываем кнопку фильтров
+    */
 
+    .mobile-filter-bar {
+        display: block;
 
-        /* =========================================================
-           NAV BADGES
-        ========================================================= */
+        margin-bottom: 14px;
+    }
 
-        .navbar .badge {
-            border: 1px solid rgba(255,255,255,0.08);
+    .mobile-filter-button {
+        width: 100%;
 
-            padding: 0.35rem 0.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
 
-            border-radius: 7px;
+        min-height: 48px;
 
-            font-size: 0.68rem;
-            font-weight: 700;
+        padding: 0 15px;
 
-            letter-spacing: 0.01em;
-        }
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
 
-        .navbar .badge.bg-danger {
-            background: rgba(239,68,68,0.15) !important;
-            color: #fca5a5 !important;
-            border-color: rgba(239,68,68,0.25);
-        }
+        background: #ffffff;
 
-        .navbar .badge.bg-warning {
-            background: rgba(245,158,11,0.15) !important;
-            color: #fcd34d !important;
-            border-color: rgba(245,158,11,0.25);
-        }
+        color: #374151;
 
+        font-size: 0.88rem;
+        font-weight: 700;
 
-        /* =========================================================
-           NOTIFICATION
-        ========================================================= */
+        box-shadow:
+            0 2px 8px rgba(15, 23, 42, 0.04);
 
-        .notification-badge {
-            position: absolute;
+        transition: all 0.18s ease;
+    }
 
-            top: 1px;
-            right: 1px;
+    .mobile-filter-button:hover {
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow:
+            0 5px 15px rgba(15, 23, 42, 0.07);
+    }
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+    .mobile-filter-button > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+    }
 
-            min-width: 18px;
-            height: 18px;
+    .mobile-filter-button i {
+        color: var(--primary);
+        font-size: 1.05rem;
+    }
 
-            padding: 0 5px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #ef4444,
-                    #dc2626
-                );
+    /*
+       На телефоне скрываем desktop-фильтры
+    */
 
-            color: #ffffff;
+    .desktop-filter {
+        display: none !important;
+    }
 
-            border: 2px solid #0b0f19;
 
-            border-radius: 999px;
+    /*
+       Каталог становится одной колонкой
+    */
 
-            font-size: 0.62rem;
-            font-weight: 800;
+    .catalog-layout {
+        display: block !important;
+    }
 
-            line-height: 1;
+    .products-area {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
 
-            box-shadow:
-                0 3px 8px rgba(239,68,68,0.35);
-        }
 
+    /*
+       Убираем старое мобильное поведение,
+       которое могло ломать index
+    */
 
-        /* =========================================================
-           NAVBAR TOGGLER
-        ========================================================= */
+    .mobile-filters-row {
+        display: none !important;
+    }
 
-        .navbar-toggler {
-            padding: 0.45rem 0.55rem;
+}
 
-            border: 1px solid rgba(255,255,255,0.12);
 
-            border-radius: 9px;
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
 
-            background: rgba(255,255,255,0.04);
-        }
+@media (max-width: 480px) {
 
-        .navbar-toggler:hover {
-            background: rgba(255,255,255,0.08);
-        }
+    .mobile-filter-bar {
+        margin-bottom: 10px;
+    }
 
-        .navbar-toggler:focus {
-            box-shadow:
-                0 0 0 3px rgba(99,102,241,0.2);
-        }
+    .mobile-filter-button {
+        min-height: 46px;
+        border-radius: 11px;
+    }
 
+    .mobile-filters {
+        width: 90vw !important;
+    }
 
-        /* =========================================================
-           MAIN
-        ========================================================= */
+    .mobile-filter-section {
+        padding: 16px;
+    }
 
-        main.container {
-            padding-top: 10px;
-            padding-bottom: 50px;
-        }
+    .mobile-filter-footer {
+        padding: 12px 16px;
+    }
 
-
-        /* =========================================================
-           CARDS
-        ========================================================= */
-
-        .card {
-            background: rgba(255,255,255,0.92);
-
-            border: 1px solid rgba(229,231,235,0.9);
-
-            border-radius: var(--radius-lg);
-
-            box-shadow: var(--shadow-sm);
-
-            overflow: hidden;
-
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            box-shadow: var(--shadow-md);
-        }
-
-        .card-header {
-            background:
-                linear-gradient(
-                    180deg,
-                    #ffffff,
-                    #fafbfc
-                );
-
-            border-bottom: 1px solid var(--border);
-
-            padding: 1rem 1.2rem;
-
-            color: #374151;
-
-            font-size: 0.9rem;
-            font-weight: 700;
-        }
-
-        .card-body {
-            padding: 1.25rem;
-        }
-
-
-        /* =========================================================
-           PRODUCT CARDS
-        ========================================================= */
-
-        .product-card {
-            position: relative;
-
-            height: 100%;
-
-            border:
-                1px solid rgba(229,231,235,0.9);
-
-            border-radius: var(--radius-lg);
-
-            overflow: hidden;
-
-            background: #ffffff;
-
-            box-shadow:
-                0 2px 6px rgba(15,23,42,0.04);
-
-            transition:
-                transform 0.25s cubic-bezier(.4,0,.2,1),
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-6px);
-
-            border-color:
-                rgba(99,102,241,0.25);
-
-            box-shadow:
-                0 18px 45px rgba(15,23,42,0.12);
-        }
-
-        .product-card::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-            right: 0;
-
-            height: 2px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--primary),
-                    #8b5cf6
-                );
-
-            opacity: 0;
-
-            transition: var(--transition);
-
-            z-index: 2;
-        }
-
-        .product-card:hover::before {
-            opacity: 1;
-        }
-
-
-        /* =========================================================
-           PRODUCT IMAGE
-        ========================================================= */
-
-        .product-card .card-img-top {
-            width: 100%;
-            height: 210px;
-
-            object-fit: cover;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #f3f4f6,
-                    #e5e7eb
-                );
-
-            border-bottom:
-                1px solid #eef0f3;
-
-            transition:
-                transform 0.45s cubic-bezier(.4,0,.2,1);
-        }
-
-        .product-card:hover .card-img-top {
-            transform: scale(1.025);
-        }
-
-
-        /* =========================================================
-           PRODUCT BODY
-        ========================================================= */
-
-        .product-card .card-body {
-            display: flex;
-            flex-direction: column;
-
-            padding: 1.2rem;
-        }
-
-        .product-card .card-title {
-            margin-bottom: 0.35rem;
-
-            color: #111827;
-
-            font-size: 1.05rem;
-            font-weight: 700;
-
-            line-height: 1.35;
-
-            letter-spacing: -0.02em;
-        }
-
-        .product-card .text-muted {
-            color: #8b93a1 !important;
-        }
-
-        .product-card .fs-4 {
-            color: #111827;
-
-            font-weight: 800;
-
-            letter-spacing: -0.04em;
-        }
-
-
-        /* =========================================================
-           PRODUCT BUTTON
-        ========================================================= */
-
-        .product-card .btn {
-            margin-top: auto;
-        }
-
-
-        /* =========================================================
-           BUTTONS
-        ========================================================= */
-
-        .btn {
-            position: relative;
-
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-
-            min-height: 40px;
-
-            border-radius: 9px;
-
-            padding: 0.55rem 1rem;
-
-            font-weight: 600;
-
-            transition:
-                transform 0.18s ease,
-                box-shadow 0.18s ease,
-                background-color 0.18s ease,
-                border-color 0.18s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:focus-visible {
-            box-shadow:
-                0 0 0 3px rgba(99,102,241,0.2);
-        }
-
-
-        /* PRIMARY */
-
-        .btn-primary {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary),
-                    var(--primary-dark)
-                );
-
-            border-color: transparent;
-
-            box-shadow:
-                0 4px 12px rgba(79,70,229,0.18);
-        }
-
-        .btn-primary:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #7073f4,
-                    #4338ca
-                );
-
-            border-color: transparent;
-
-            box-shadow:
-                0 7px 18px rgba(79,70,229,0.25);
-        }
-
-
-        /* SUCCESS */
-
-        .btn-success {
-            background:
-                linear-gradient(
-                    135deg,
-                    #10b981,
-                    #059669
-                );
-
-            border-color: transparent;
-
-            box-shadow:
-                0 4px 12px rgba(16,185,129,0.18);
-        }
-
-        .btn-success:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #14c991,
-                    #047857
-                );
-
-            border-color: transparent;
-
-            box-shadow:
-                0 7px 18px rgba(16,185,129,0.25);
-        }
-
-
-        /* DANGER */
-
-        .btn-danger {
-            background:
-                linear-gradient(
-                    135deg,
-                    #ef4444,
-                    #dc2626
-                );
-
-            border-color: transparent;
-        }
-
-        .btn-danger:hover {
-            background:
-                linear-gradient(
-                    135deg,
-                    #f05252,
-                    #b91c1c
-                );
-        }
-
-
-        /* OUTLINE */
-
-        .btn-outline-primary {
-            color: var(--primary);
-
-            border-color:
-                rgba(99,102,241,0.35);
-
-            background: rgba(99,102,241,0.03);
-        }
-
-        .btn-outline-primary:hover {
-            color: #ffffff;
-
-            background: var(--primary);
-
-            border-color: var(--primary);
-        }
-
-
-        /* =========================================================
-           BADGES
-        ========================================================= */
-
-        .badge {
-            padding: 0.38rem 0.65rem;
-
-            border-radius: 7px;
-
-            font-size: 0.72rem;
-            font-weight: 700;
-        }
-
-        .badge.bg-danger {
-            background: #fee2e2 !important;
-            color: #b91c1c !important;
-        }
-
-        .badge.bg-warning {
-            background: #fef3c7 !important;
-            color: #92400e !important;
-        }
-
-        .badge.bg-success {
-            background: #d1fae5 !important;
-            color: #047857 !important;
-        }
-
-        .badge.bg-info {
-            background: #e0f2fe !important;
-            color: #0369a1 !important;
-        }
-
-
-        /* =========================================================
-           STATUS BADGES
-        ========================================================= */
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-
-            padding: 0.32rem 0.7rem;
-
-            border-radius: 999px;
-
-            font-size: 0.74rem;
-            font-weight: 700;
-        }
-
-        .status-new {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .status-answered {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-
-        /* =========================================================
-           ALERTS
-        ========================================================= */
-
-        .alert {
-            border: 1px solid transparent;
-
-            border-radius: 12px;
-
-            padding: 0.85rem 1rem;
-
-            font-weight: 500;
-
-            box-shadow: var(--shadow-sm);
-        }
-
-        .alert-info {
-            background: #eff8ff;
-            color: #075985;
-
-            border-color: #dbeafe;
-        }
-
-        .alert-success {
-            background: #ecfdf5;
-            color: #065f46;
-
-            border-color: #d1fae5;
-        }
-
-        .alert-warning {
-            background: #fffbeb;
-            color: #92400e;
-
-            border-color: #fef3c7;
-        }
-
-        .alert-danger {
-            background: #fef2f2;
-            color: #991b1b;
-
-            border-color: #fee2e2;
-        }
-
-        .alert .btn-close {
-            opacity: 0.5;
-        }
-
-        .alert .btn-close:hover {
-            opacity: 1;
-        }
-
-
-        /* =========================================================
-           FORMS
-        ========================================================= */
-
-        .form-label {
-            margin-bottom: 0.45rem;
-
-            color: #374151;
-
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .form-control,
-        .form-select {
-            min-height: 42px;
-
-            padding:
-                0.55rem 0.8rem;
-
-            border:
-                1px solid #d7dce3;
-
-            border-radius: 9px;
-
-            background-color: #ffffff;
-
-            color: #111827;
-
-            font-size: 0.9rem;
-
-            box-shadow:
-                inset 0 1px 2px rgba(15,23,42,0.02);
-
-            transition: var(--transition);
-        }
-
-        .form-control::placeholder {
-            color: #a3aab5;
-        }
-
-        .form-control:hover,
-        .form-select:hover {
-            border-color: #c4cad4;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: var(--primary);
-
-            background-color: #ffffff;
-
-            box-shadow:
-                0 0 0 3px rgba(99,102,241,0.11);
-
-            outline: none;
-        }
-
-        textarea.form-control {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-
-        /* =========================================================
-           INPUT GROUP
-        ========================================================= */
-
-        .input-group .form-control {
-            z-index: 1;
-        }
-
-        .input-group-text {
-            border:
-                1px solid #d7dce3;
-
-            background: #f9fafb;
-
-            color: #6b7280;
-
-            border-radius: 9px;
-        }
-
-
-        /* =========================================================
-           SWITCH
-        ========================================================= */
-
-        .form-switch {
-            padding-left: 3.2em;
-        }
-
-        .form-switch .form-check-input {
-            width: 2.9em !important;
-            height: 1.55em !important;
-
-            margin-left: -3.2em;
-
-            margin-top: 0.1em;
-
-            cursor: pointer;
-
-            background-color: #d1d5db;
-
-            border-color: #c7ccd4;
-
-            box-shadow: none;
-
-            transition:
-                background-color 0.2s ease,
-                border-color 0.2s ease;
-        }
-
-        .form-switch .form-check-input:checked {
-            background-color: var(--success);
-            border-color: var(--success-dark);
-        }
-
-        .form-switch .form-check-input:focus {
-            border-color: var(--success);
-
-            box-shadow:
-                0 0 0 3px rgba(16,185,129,0.15);
-        }
-
-
-        /* =========================================================
-           TABLE
-        ========================================================= */
-
-        .table-responsive {
-            border-radius: var(--radius-lg);
-        }
-
-        .table {
-            margin-bottom: 0;
-
-            background: #ffffff;
-
-            border-radius: var(--radius-lg);
-
-            overflow: hidden;
-
-            box-shadow: var(--shadow-sm);
-        }
-
-        .table thead th {
-            padding: 0.9rem 1rem;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #fafbfc,
-                    #f6f7f9
-                );
-
-            border-bottom:
-                1px solid #e5e7eb;
-
-            color: #4b5563;
-
-            font-size: 0.78rem;
-            font-weight: 700;
-
-            text-transform: uppercase;
-            letter-spacing: 0.035em;
-
-            white-space: nowrap;
-        }
-
-        .table tbody td {
-            padding: 0.9rem 1rem;
-
-            color: #374151;
-
-            vertical-align: middle;
-
-            border-color: #f0f1f3;
-        }
-
-        .table tbody tr {
-            transition: background-color 0.15s ease;
-        }
-
-        .table tbody tr:hover {
-            background: #f8f9ff;
-        }
-
-
-        /* =========================================================
-           MODAL
-        ========================================================= */
-
-        .modal-backdrop.show {
-            opacity: 0.65;
-        }
-
-        .modal-content {
-            border: 1px solid rgba(255,255,255,0.7);
-
-            border-radius: var(--radius-xl);
-
-            box-shadow:
-                0 30px 80px rgba(15,23,42,0.2);
-
-            overflow: hidden;
-        }
-
-        .modal-header {
-            padding: 1.2rem 1.4rem;
-
-            border-bottom:
-                1px solid #eef0f3;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #ffffff,
-                    #fafbfc
-                );
-        }
-
-        .modal-title {
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .modal-body {
-            padding: 1.4rem;
-        }
-
-        .modal-footer {
-            padding: 1rem 1.4rem;
-
-            border-top:
-                1px solid #eef0f3;
-
-            background: #fafbfc;
-        }
-
-
-        /* =========================================================
-           DROPDOWNS
-        ========================================================= */
-
-        .dropdown-menu {
-            margin-top: 8px !important;
-
-            padding: 0.4rem;
-
-            border:
-                1px solid rgba(229,231,235,0.9);
-
-            border-radius: 12px;
-
-            background: rgba(255,255,255,0.98);
-
-            box-shadow:
-                0 15px 40px rgba(15,23,42,0.12);
-
-            backdrop-filter: blur(15px);
-        }
-
-        .dropdown-item {
-            padding: 0.55rem 0.7rem;
-
-            border-radius: 8px;
-
-            font-size: 0.88rem;
-
-            transition: var(--transition);
-        }
-
-        .dropdown-item:hover {
-            background: #f3f4ff;
-            color: var(--primary);
-        }
-
-
-        /* =========================================================
-           PAGINATION
-        ========================================================= */
-
-        .pagination .page-link {
-            margin: 0 2px;
-
-            border: 1px solid #e5e7eb;
-
-            border-radius: 8px !important;
-
-            color: #4b5563;
-
-            font-weight: 600;
-
-            transition: var(--transition);
-        }
-
-        .pagination .page-link:hover {
-            color: var(--primary);
-
-            background: #f3f4ff;
-
-            border-color:
-                rgba(99,102,241,0.2);
-        }
-
-        .pagination .active .page-link {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-
-        /* =========================================================
-           SCROLLBAR
-        ========================================================= */
-
-        ::-webkit-scrollbar {
-            width: 9px;
-            height: 9px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #eef0f4;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c4cad4;
-
-            border-radius: 999px;
-
-            border: 2px solid #eef0f4;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af;
-        }
-
-
-        /* =========================================================
-           MOBILE NAV
-        ========================================================= */
-
-        @media (max-width: 991.98px) {
-
-            .navbar-collapse {
-                margin-top: 10px;
-
-                padding: 10px;
-
-                border:
-                    1px solid rgba(255,255,255,0.08);
-
-                border-radius: 14px;
-
-                background:
-                    rgba(10,14,23,0.96);
-
-                box-shadow:
-                    0 15px 35px rgba(0,0,0,0.2);
-
-                backdrop-filter: blur(15px);
-            }
-
-            .navbar-nav {
-                gap: 3px;
-            }
-
-            .navbar .nav-link {
-                width: 100%;
-            }
-
-            .navbar-text {
-                width: 100%;
-
-                padding:
-                    0.55rem 0.7rem;
-
-                border-radius: 8px;
-
-                background:
-                    rgba(255,255,255,0.03);
-            }
-        }
-
-
-        /* =========================================================
-           TABLET / MOBILE
-        ========================================================= */
-
-        @media (max-width: 768px) {
-
-            main.container {
-                margin-top: 0 !important;
-
-                padding-top: 6px;
-                padding-bottom: 30px;
-            }
-
-            h1 {
-                font-size: 1.55rem;
-            }
-
-            h2 {
-                font-size: 1.3rem;
-            }
-
-            h3 {
-                font-size: 1.15rem;
-            }
-
-            .card {
-                border-radius: 14px;
-            }
-
-            .card-body {
-                padding: 1rem;
-            }
-
-
-            /* =====================================================
-               MOBILE FILTERS
-            ===================================================== */
-
-            .mobile-filters-row {
-                display: flex !important;
-
-                flex-direction: row !important;
-
-                gap: 8px;
-
-                margin-bottom: 16px;
-            }
-
-
-            .mobile-filters-row .col-md-2 {
-                flex: 1 1 50%;
-
-                width: 50% !important;
-
-                padding: 0 !important;
-
-                margin: 0 !important;
-            }
-
-
-            .mobile-filters-row .card {
-                margin: 0 !important;
-
-                border-radius: 12px;
-
-                overflow: hidden;
-
-                transition:
-                    box-shadow 0.2s ease,
-                    border-color 0.2s ease;
-            }
-
-
-            /* Заголовок фильтра */
-
-            .mobile-filters-row .card-header {
-                position: relative;
-
-                display: flex;
-
-                align-items: center;
-
-                justify-content: space-between;
-
-                min-height: 46px;
-
-                padding: 10px 12px;
-
-                cursor: pointer;
-
-                user-select: none;
-
-                background:
-                    linear-gradient(
-                        180deg,
-                        #ffffff,
-                        #fafbfc
-                    );
-
-                border-bottom: 0;
-
-                font-size: 0.8rem;
-
-                color: #374151;
-            }
-
-
-            /* Иконка справа */
-
-            .mobile-filters-row .card-header::after {
-                content: "\f282";
-
-                font-family: "bootstrap-icons";
-
-                display: inline-flex;
-
-                align-items: center;
-
-                justify-content: center;
-
-                width: 25px;
-                height: 25px;
-
-                border-radius: 7px;
-
-                background: #f3f4ff;
-
-                color: var(--primary);
-
-                font-size: 0.75rem;
-
-                transition:
-                    transform 0.25s ease,
-                    background 0.2s ease;
-            }
-
-
-            /* Тело фильтра скрыто */
-
-            .mobile-filters-row .card-body {
-                display: none;
-
-                max-height: 220px !important;
-
-                overflow-y: auto;
-
-                padding: 10px !important;
-
-                border-top:
-                    1px solid #eef0f3;
-
-                background: #ffffff;
-            }
-
-
-            /* Открытый фильтр */
-
-            .mobile-filters-row .card.mobile-filter-open {
-                border-color:
-                    rgba(99,102,241,0.25);
-
-                box-shadow:
-                    0 8px 25px rgba(15,23,42,0.08);
-            }
-
-
-            .mobile-filters-row .card.mobile-filter-open .card-body {
-                display: block;
-            }
-
-
-            .mobile-filters-row .card.mobile-filter-open .card-header {
-                color: var(--primary);
-            }
-
-
-            .mobile-filters-row .card.mobile-filter-open .card-header::after {
-                transform: rotate(180deg);
-
-                background: #e9e9ff;
-            }
-
-
-            /* =====================================================
-               CATEGORY CHECKBOXES
-            ===================================================== */
-
-            .mobile-filters-row .form-check {
-                display: flex;
-
-                align-items: center;
-
-                min-height: 30px;
-
-                margin-bottom: 5px;
-
-                padding-left: 1.6em;
-            }
-
-            .mobile-filters-row .form-check:last-child {
-                margin-bottom: 0;
-            }
-
-            .mobile-filters-row .form-check-input {
-                cursor: pointer;
-
-                margin-top: 0;
-
-                margin-left: -1.6em;
-            }
-
-            .mobile-filters-row .form-check-label {
-                font-size: 0.78rem;
-
-                color: #374151;
-
-                cursor: pointer;
-
-                line-height: 1.3;
-            }
-
-
-            /* =====================================================
-               SORT SELECT
-            ===================================================== */
-
-            .mobile-filters-row .form-select {
-                min-height: 38px;
-
-                padding:
-                    0.45rem 0.65rem;
-
-                font-size: 0.78rem;
-
-                border-radius: 8px;
-            }
-
-
-            /* Подсказка */
-
-            .mobile-filters-row small.text-muted {
-                display: block;
-
-                margin-top: 8px;
-
-                font-size: 0.65rem;
-
-                line-height: 1.3;
-            }
-
-
-            /* =====================================================
-               PRODUCTS
-            ===================================================== */
-
-            .col-md-8 {
-                width: 100%;
-
-                padding: 0 !important;
-            }
-
-            .col-lg-4.col-md-6 {
-                width: 50% !important;
-
-                padding: 5px !important;
-            }
-
-            .product-card .card-img-top {
-                height: 150px;
-            }
-
-            .product-card .card-body {
-                padding: 0.85rem;
-            }
-
-            .product-card .card-title {
-                font-size: 0.9rem;
-            }
-
-            .product-card .fs-4 {
-                font-size: 1.05rem !important;
-            }
-
-            .product-card .btn {
-                min-height: 36px;
-
-                padding:
-                    0.4rem 0.65rem;
-
-                font-size: 0.78rem;
-            }
-
-            .form-switch .form-check-input {
-                width: 2.55em !important;
-                height: 1.4em !important;
-            }
-
-            .table {
-                font-size: 0.8rem;
-            }
-
-            .table thead th,
-            .table tbody td {
-                padding: 0.65rem 0.55rem;
-            }
-        }
-
-
-        /* =========================================================
-           SMALL PHONES
-        ========================================================= */
-
-        @media (max-width: 480px) {
-
-            .navbar {
-                min-height: 62px;
-
-                padding: 0.5rem 0;
-            }
-
-            .navbar-brand {
-                font-size: 1.15rem;
-            }
-
-            .brand-mark {
-                width: 32px;
-                height: 32px;
-
-                border-radius: 9px;
-            }
-
-            .navbar .container {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-
-            main.container {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-
-
-            /* Фильтры на маленьких телефонах */
-
-            .mobile-filters-row {
-                gap: 6px;
-            }
-
-            .mobile-filters-row .card-header {
-                min-height: 42px;
-
-                padding: 8px 9px;
-
-                font-size: 0.72rem;
-            }
-
-            .mobile-filters-row .card-header::after {
-                width: 22px;
-                height: 22px;
-
-                font-size: 0.65rem;
-            }
-
-            .mobile-filters-row .card-body {
-                max-height: 190px !important;
-
-                padding: 8px !important;
-            }
-
-            .mobile-filters-row .form-check-label {
-                font-size: 0.72rem;
-            }
-
-            .mobile-filters-row .form-select {
-                font-size: 0.7rem;
-
-                min-height: 34px;
-            }
-
-
-            /* Товары */
-
-            .col-lg-4.col-md-6 {
-                width: 50% !important;
-
-                padding: 3px !important;
-            }
-
-            .product-card {
-                border-radius: 12px;
-            }
-
-            .product-card .card-img-top {
-                height: 120px;
-            }
-
-            .product-card .card-body {
-                padding: 8px;
-            }
-
-            .product-card .card-title {
-                font-size: 0.78rem;
-
-                line-height: 1.25;
-            }
-
-            .product-card .fs-4 {
-                font-size: 0.95rem !important;
-            }
-
-            .product-card .btn {
-                min-height: 32px;
-
-                padding:
-                    0.3rem 0.45rem;
-
-                font-size: 0.7rem;
-
-                border-radius: 7px;
-            }
-
-            .badge {
-                font-size: 0.64rem;
-
-                padding:
-                    0.28rem 0.5rem;
-            }
-
-            h1 {
-                font-size: 1.35rem;
-            }
-
-            .alert {
-                padding:
-                    0.7rem 0.8rem;
-
-                font-size: 0.82rem;
-            }
-
-            .modal-content {
-                border-radius: 16px;
-            }
-
-            .modal-body {
-                padding: 1rem;
-            }
-        }
-
-
-        /* =========================================================
-           DESKTOP FILTERS
-           
-           На ПК всё остаётся раскрытым.
-        ========================================================= */
-
-        @media (min-width: 769px) {
-
-            .mobile-filters-row .card-body {
-                display: block !important;
-            }
-
-            .mobile-filters-row .card-header {
-                cursor: default;
-            }
-
-            .mobile-filters-row .card-header::after {
-                display: none;
-            }
-        }
-
-
-        /* =========================================================
-           REDUCED MOTION
-        ========================================================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-
-                transition: none !important;
-
-                animation: none !important;
-            }
-        }
-
-    </style>
-</head>
-
-<body>
-
-    <!-- =========================================================
-         NAVBAR
-    ========================================================= -->
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
-
-        <div class="container">
-
-            <!-- LOGO -->
-            <a class="navbar-brand" href="/">
-
-                <span class="brand-mark">
-                    <i class="bi bi-wallet2"></i>
-                </span>
-
-                <span class="brand-text">
-                    SpendIt
-                </span>
-
-            </a>
-
-
-            <!-- MOBILE BUTTON -->
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Переключатель навигации"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-
-            <!-- NAVIGATION -->
-            <div
-                class="collapse navbar-collapse justify-content-end"
-                id="navbarNav"
-            >
-
-                <ul class="navbar-nav align-items-center">
-
-                    {% if current_user.is_authenticated %}
-
-                        <!-- PURCHASES -->
-                        <li class="nav-item me-1">
-
-                            <a
-                                class="nav-link position-relative"
-                                href="{{ url_for('my_purchases') }}"
-                                title="Мои покупки"
-                                aria-label="Мои покупки"
-                            >
-
-                                <i class="bi bi-bag-check"></i>
-
-                                <span class="d-lg-none">
-                                    Мои покупки
-                                </span>
-
-                            </a>
-
-                        </li>
-
-
-                        <!-- COMPLAINTS -->
-                        <li class="nav-item me-1">
-
-                            <a
-                                class="nav-link position-relative"
-                                href="{{ url_for('my_complaints') }}"
-                                title="Мои жалобы"
-                                aria-label="Мои жалобы"
-                            >
-
-                                <i class="bi bi-chat-left-text"></i>
-
-                                <span class="d-lg-none">
-                                    Мои жалобы
-                                </span>
-
-                                {% if notifications is defined and notifications > 0 %}
-
-                                    <span class="notification-badge">
-                                        {{ notifications }}
-                                    </span>
-
-                                {% endif %}
-
-                            </a>
-
-                        </li>
-
-
-                        <!-- USER -->
-                        <li class="nav-item">
-
-                            <span class="navbar-text me-lg-2">
-
-                                <span>
-                                    Привет,
-                                    <strong>
-                                        {{ current_user.username }}
-                                    </strong>
-                                </span>
-
-                                {% if current_user.role == 'admin' %}
-
-                                    <span class="badge bg-danger">
-                                        Администратор
-                                    </span>
-
-                                {% elif current_user.role == 'subadmin' %}
-
-                                    <span class="badge bg-warning text-dark">
-                                        Суб-админ
-                                    </span>
-
-                                {% endif %}
-
-                            </span>
-
-                        </li>
-
-
-                        <!-- ADMIN -->
-                        {% if current_user.role in ('admin', 'subadmin') %}
-
-                            <li class="nav-item">
-
-                                <a
-                                    class="nav-link"
-                                    href="{{ url_for('admin_panel') }}"
-                                    title="Панель администратора"
-                                >
-
-                                    <i class="bi bi-shield-check"></i>
-
-                                    <span>
-                                        Админка
-                                    </span>
-
-                                </a>
-
-                            </li>
-
-                        {% endif %}
-
-
-                        <!-- LOGOUT -->
-                        <li class="nav-item">
-
-                            <a
-                                class="nav-link"
-                                href="{{ url_for('logout') }}"
-                            >
-
-                                <i class="bi bi-box-arrow-right"></i>
-
-                                <span>
-                                    Выйти
-                                </span>
-
-                            </a>
-
-                        </li>
-
-
-                    {% else %}
-
-                        <!-- LOGIN -->
-                        <li class="nav-item">
-
-                            <a
-                                class="nav-link"
-                                href="{{ url_for('login') }}"
-                            >
-
-                                <i class="bi bi-box-arrow-in-right"></i>
-
-                                Войти
-
-                            </a>
-
-                        </li>
-
-
-                        <!-- REGISTER -->
-                        <li class="nav-item">
-
-                            <a
-                                class="nav-link"
-                                href="{{ url_for('register') }}"
-                            >
-
-                                <i class="bi bi-person-plus"></i>
-
-                                Регистрация
-
-                            </a>
-
-                        </li>
-
-                    {% endif %}
-
-                </ul>
-
-            </div>
-
-        </div>
-
-    </nav>
-
-
-    <!-- =========================================================
-         FLASH MESSAGES
-    ========================================================= -->
-
-    <div class="container mt-3">
-
-        {% with messages = get_flashed_messages() %}
-
-            {% if messages %}
-
-                {% for msg in messages %}
-
-                    <div
-                        class="alert alert-info alert-dismissible fade show"
-                        role="alert"
-                    >
-
-                        <i class="bi bi-info-circle me-2"></i>
-
-                        {{ msg }}
-
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert"
-                            aria-label="Закрыть"
-                        ></button>
-
-                    </div>
-
-                {% endfor %}
-
-            {% endif %}
-
-        {% endwith %}
-
-    </div>
-
-
-    <!-- =========================================================
-         MAIN CONTENT
-    ========================================================= -->
-
-    <main class="container mt-4">
-
-        {% block content %}
-
-        {% endblock %}
-
-    </main>
-
-
-    <!-- =========================================================
-         BOOTSTRAP JS
-    ========================================================= -->
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
-
-
-    <!-- =========================================================
-         MOBILE FILTER BURGER
-    ========================================================= -->
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const filterCards = document.querySelectorAll(
-                '.mobile-filters-row > .col-6 .card'
-            );
-
-            filterCards.forEach(function (card) {
-
-                const header = card.querySelector('.card-header');
-
-                if (!header) {
-                    return;
-                }
-
-                header.addEventListener('click', function () {
-
-                    /* Только на мобильных устройствах */
-                    if (window.innerWidth > 768) {
-                        return;
-                    }
-
-                    /* Закрываем все остальные фильтры */
-                    filterCards.forEach(function (otherCard) {
-
-                        if (otherCard !== card) {
-                            otherCard.classList.remove(
-                                'mobile-filter-open'
-                            );
-                        }
-
-                    });
-
-                    /* Переключаем текущий */
-                    card.classList.toggle(
-                        'mobile-filter-open'
-                    );
-
-                });
-
-            });
-
-
-            /* =====================================================
-               Если пользователь переключил ориентацию/размер
-               возвращаем нормальное состояние
-            ===================================================== */
-
-            window.addEventListener('resize', function () {
-
-                if (window.innerWidth > 768) {
-
-                    filterCards.forEach(function (card) {
-
-                        card.classList.remove(
-                            'mobile-filter-open'
-                        );
-
-                    });
-
-                }
-
-            });
-
-        });
-
-    </script>
-
-
-    <!-- =========================================================
-         PAGE SCRIPTS
-    ========================================================= -->
-
-    {% block scripts %}
-
-    {% endblock %}
-
-</body>
-</html>
+}
