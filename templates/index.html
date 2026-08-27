@@ -3,31 +3,47 @@
 
 {% block content %}
 
-<!-- =========================
-     HERO / ЗАГОЛОВОК
-========================= -->
+<!-- =========================================================
+     HERO
+========================================================= -->
+
 <section class="home-header">
     <div>
         <span class="home-eyebrow">КАТАЛОГ ПРЕДЛОЖЕНИЙ</span>
+
         <h1>Куда потратить деньги</h1>
-        <p>Найдите подходящее предложение под ваш бюджет</p>
+
+        <p>
+            Найдите подходящее предложение под ваш бюджет
+        </p>
     </div>
 </section>
 
 
-<!-- =========================
-     ПОИСК ПО БЮДЖЕТУ
-========================= -->
+<!-- =========================================================
+     ОСНОВНАЯ ФОРМА ФИЛЬТРОВ
+========================================================= -->
+
 <form method="get" action="/" id="filterForm">
 
+    <!-- =====================================================
+         ПОИСК ПО БЮДЖЕТУ
+    ====================================================== -->
+
     <section class="budget-search">
+
         <div class="budget-search-inner">
 
             <div class="budget-input-wrapper">
-                <span class="budget-label">Ваш бюджет</span>
+
+                <span class="budget-label">
+                    Ваш бюджет
+                </span>
 
                 <div class="budget-input-row">
+
                     <div class="budget-input-container">
+
                         <input
                             type="number"
                             class="form-control budget-input"
@@ -37,27 +53,37 @@
                             value="{{ budget }}"
                             min="0"
                         >
-                        <span class="budget-currency">₽</span>
+
+                        <span class="budget-currency">
+                            ₽
+                        </span>
+
                     </div>
 
-                    <button class="btn btn-primary budget-button" type="submit">
+                    <button
+                        class="btn btn-primary budget-button"
+                        type="submit"
+                    >
                         <i class="bi bi-search"></i>
                         <span>Показать</span>
                     </button>
+
                 </div>
 
                 <small>
                     Оставьте поле пустым, чтобы увидеть все предложения
                 </small>
+
             </div>
 
         </div>
+
     </section>
 
 
-    <!-- =========================
-         МОБИЛЬНАЯ ПАНЕЛЬ ФИЛЬТРОВ
-    ========================= -->
+    <!-- =====================================================
+         МОБИЛЬНАЯ КНОПКА ФИЛЬТРОВ
+    ====================================================== -->
 
     <div class="mobile-filter-bar">
 
@@ -68,20 +94,22 @@
             data-bs-target="#mobileFilters"
             aria-controls="mobileFilters"
         >
+
             <span>
                 <i class="bi bi-sliders"></i>
                 Фильтры
             </span>
 
             <i class="bi bi-chevron-right"></i>
+
         </button>
 
     </div>
 
 
-    <!-- =========================
-         МОБИЛЬНОЕ BURGER / OFFCANVAS
-    ========================= -->
+    <!-- =====================================================
+         МОБИЛЬНОЕ МЕНЮ ФИЛЬТРОВ
+    ====================================================== -->
 
     <div
         class="offcanvas offcanvas-start mobile-filters"
@@ -90,11 +118,20 @@
         aria-labelledby="mobileFiltersLabel"
     >
 
+        <!-- HEADER -->
+
         <div class="offcanvas-header">
 
             <div>
-                <span class="filter-eyebrow">НАСТРОЙКИ</span>
-                <h5 id="mobileFiltersLabel">Фильтры</h5>
+
+                <span class="filter-eyebrow">
+                    НАСТРОЙКИ
+                </span>
+
+                <h5 id="mobileFiltersLabel">
+                    Фильтры
+                </h5>
+
             </div>
 
             <button
@@ -107,18 +144,29 @@
         </div>
 
 
+        <!-- BODY -->
+
         <div class="offcanvas-body">
 
-            <!-- КАТЕГОРИИ -->
+
+            <!-- =============================================
+                 МОБИЛЬНЫЕ КАТЕГОРИИ
+            ============================================== -->
+
             <div class="mobile-filter-section">
 
                 <div class="filter-section-title">
-                    <span>Категории</span>
 
-                    <span class="filter-count">
+                    <span>
+                        Категории
+                    </span>
+
+                    <span class="filter-count" id="mobileCategoryCount">
                         {{ selected_categories|length if selected_categories else 0 }}
                     </span>
+
                 </div>
+
 
                 <div class="mobile-category-list">
 
@@ -127,7 +175,7 @@
                     <label class="mobile-category-item">
 
                         <input
-                            class="form-check-input category-checkbox-mobile"
+                            class="category-checkbox-mobile"
                             type="checkbox"
                             name="category_mobile"
                             value="{{ cat }}"
@@ -136,7 +184,9 @@
                         >
 
                         <span class="category-checkbox-custom">
+
                             <i class="bi bi-check"></i>
+
                         </span>
 
                         <span class="category-name">
@@ -149,6 +199,7 @@
 
                 </div>
 
+
                 <p class="filter-hint">
                     Если ничего не выбрано — показываются все категории
                 </p>
@@ -156,14 +207,25 @@
             </div>
 
 
-            <!-- СОРТИРОВКА -->
+            <!-- =============================================
+                 МОБИЛЬНАЯ СОРТИРОВКА
+            ============================================== -->
+
             <div class="mobile-filter-section">
 
                 <div class="filter-section-title">
-                    <span>Сортировка</span>
+
+                    <span>
+                        Сортировка
+                    </span>
+
                 </div>
 
+
                 <div class="sort-options">
+
+
+                    <!-- Цена ↑ -->
 
                     <label class="sort-option">
 
@@ -177,12 +239,21 @@
                         <span class="sort-radio"></span>
 
                         <span>
-                            <strong>Цена</strong>
-                            <small>От дешёвых к дорогим</small>
+
+                            <strong>
+                                Цена
+                            </strong>
+
+                            <small>
+                                От дешёвых к дорогим
+                            </small>
+
                         </span>
 
                     </label>
 
+
+                    <!-- Цена ↓ -->
 
                     <label class="sort-option">
 
@@ -196,12 +267,21 @@
                         <span class="sort-radio"></span>
 
                         <span>
-                            <strong>Цена</strong>
-                            <small>От дорогих к дешёвым</small>
+
+                            <strong>
+                                Цена
+                            </strong>
+
+                            <small>
+                                От дорогих к дешёвым
+                            </small>
+
                         </span>
 
                     </label>
 
+
+                    <!-- Название А-Я -->
 
                     <label class="sort-option">
 
@@ -215,12 +295,21 @@
                         <span class="sort-radio"></span>
 
                         <span>
-                            <strong>Название</strong>
-                            <small>От А до Я</small>
+
+                            <strong>
+                                Название
+                            </strong>
+
+                            <small>
+                                От А до Я
+                            </small>
+
                         </span>
 
                     </label>
 
+
+                    <!-- Название Я-А -->
 
                     <label class="sort-option">
 
@@ -234,8 +323,15 @@
                         <span class="sort-radio"></span>
 
                         <span>
-                            <strong>Название</strong>
-                            <small>От Я до А</small>
+
+                            <strong>
+                                Название
+                            </strong>
+
+                            <small>
+                                От Я до А
+                            </small>
+
                         </span>
 
                     </label>
@@ -247,7 +343,10 @@
         </div>
 
 
-        <!-- FOOTER -->
+        <!-- =============================================
+             FOOTER MOBILE FILTERS
+        ============================================== -->
+
         <div class="mobile-filter-footer">
 
             <button
@@ -271,27 +370,39 @@
     </div>
 
 
-    <!-- =========================
-         DESKTOP FILTERS + PRODUCTS
-    ========================= -->
+    <!-- =====================================================
+         CATALOG
+    ====================================================== -->
 
     <div class="catalog-layout">
 
 
-        <!-- ДЕСКТОП КАТЕГОРИИ -->
+        <!-- =================================================
+             DESKTOP: КАТЕГОРИИ
+        ================================================== -->
 
         <aside class="desktop-filter categories-filter">
 
             <div class="filter-card">
 
                 <div class="filter-card-header">
+
                     <div>
-                        <span class="filter-eyebrow">ФИЛЬТР</span>
-                        <h6>Категории</h6>
+
+                        <span class="filter-eyebrow">
+                            ФИЛЬТР
+                        </span>
+
+                        <h6>
+                            Категории
+                        </h6>
+
                     </div>
 
                     <i class="bi bi-grid"></i>
+
                 </div>
+
 
                 <div class="filter-card-body">
 
@@ -309,14 +420,19 @@
                         >
 
                         <span class="desktop-checkbox">
+
                             <i class="bi bi-check"></i>
+
                         </span>
 
-                        <span>{{ cat }}</span>
+                        <span>
+                            {{ cat }}
+                        </span>
 
                     </label>
 
                     {% endfor %}
+
 
                     <p class="filter-hint">
                         Если ничего не выбрано — все категории
@@ -329,14 +445,16 @@
         </aside>
 
 
-        <!-- =========================
-             ЦЕНТР
-        ========================= -->
+        <!-- =================================================
+             PRODUCTS
+        ================================================== -->
 
         <main class="products-area">
 
 
-            <!-- ПЕРСОНАЛЬНЫЕ РЕКОМЕНДАЦИИ -->
+            <!-- =============================================
+                 PERSONAL RECOMMENDATIONS
+            ============================================== -->
 
             {% if current_user.quiz_done %}
 
@@ -346,17 +464,24 @@
                     <i class="bi bi-stars"></i>
                 </div>
 
+
                 <div class="recommendation-content">
 
-                    <strong>Персональные рекомендации</strong>
+                    <strong>
+                        Персональные рекомендации
+                    </strong>
 
                     <span>
+
                         Под ваш бюджет
                         (~{{ rec_budget if rec_budget else ((current_user.income / 15 + current_user.income / 30) / 2) | int }} ₽)
+
                         и интересы
+
                     </span>
 
                 </div>
+
 
                 <div class="form-check form-switch recommendation-switch">
 
@@ -365,7 +490,6 @@
                         type="checkbox"
                         id="personalToggle"
                         {% if personalized %}checked{% endif %}
-                        onchange="togglePersonalized(this)"
                     >
 
                 </div>
@@ -375,25 +499,39 @@
             {% endif %}
 
 
-            <!-- =========================
-                 ТОВАРЫ
-            ========================= -->
+            <!-- =============================================
+                 PRODUCTS HEADER
+            ============================================== -->
 
             {% if offers %}
 
             <div class="products-header">
 
                 <div>
-                    <span class="products-eyebrow">ПРЕДЛОЖЕНИЯ</span>
-                    <h2>Подходящие варианты</h2>
+
+                    <span class="products-eyebrow">
+                        ПРЕДЛОЖЕНИЯ
+                    </span>
+
+                    <h2>
+                        Подходящие варианты
+                    </h2>
+
                 </div>
 
+
                 <span class="products-count">
+
                     {{ offers|length }} предложений
+
                 </span>
 
             </div>
 
+
+            <!-- =============================================
+                 PRODUCTS GRID
+            ============================================== -->
 
             <div class="products-grid">
 
@@ -404,6 +542,9 @@
                     onclick="location.href='/product/{{ offer.id }}'"
                 >
 
+
+                    <!-- IMAGE -->
+
                     <div class="product-image-wrapper">
 
                         <img
@@ -412,6 +553,7 @@
                             alt="{{ offer.name }}"
                             loading="lazy"
                         >
+
 
                         {% if offer.original_price %}
 
@@ -424,22 +566,32 @@
                     </div>
 
 
+                    <!-- BODY -->
+
                     <div class="product-body">
+
 
                         <div class="product-category">
                             {{ offer.category }}
                         </div>
 
+
                         <h3 class="product-title">
                             {{ offer.name }}
                         </h3>
+
 
                         <p class="product-description">
                             {{ offer.desc }}
                         </p>
 
 
+                        <!-- BOTTOM -->
+
                         <div class="product-bottom">
+
+
+                            <!-- PRICE -->
 
                             <div class="product-price">
 
@@ -451,6 +603,7 @@
 
                                 {% endif %}
 
+
                                 <span class="product-current-price">
                                     {{ offer.price }} ₽
                                 </span>
@@ -458,7 +611,10 @@
                             </div>
 
 
+                            <!-- BUY -->
+
                             <button
+                                type="button"
                                 class="btn btn-success product-buy"
                                 data-bs-toggle="modal"
                                 data-bs-target="#buyModal"
@@ -485,13 +641,20 @@
 
             {% else %}
 
+
+            <!-- =============================================
+                 EMPTY
+            ============================================== -->
+
             <div class="empty-state">
 
                 <div class="empty-icon">
                     <i class="bi bi-search"></i>
                 </div>
 
-                <h3>Ничего не найдено</h3>
+                <h3>
+                    Ничего не найдено
+                </h3>
 
                 <p>
                     Попробуйте изменить категории или увеличить бюджет.
@@ -504,24 +667,33 @@
         </main>
 
 
-        <!-- =========================
-             DESKTOP СОРТИРОВКА
-        ========================= -->
+        <!-- =================================================
+             DESKTOP: СОРТИРОВКА
+        ================================================== -->
 
         <aside class="desktop-filter sorting-filter">
 
             <div class="filter-card">
 
+
                 <div class="filter-card-header">
 
                     <div>
-                        <span class="filter-eyebrow">ПОРЯДОК</span>
-                        <h6>Сортировка</h6>
+
+                        <span class="filter-eyebrow">
+                            ПОРЯДОК
+                        </span>
+
+                        <h6>
+                            Сортировка
+                        </h6>
+
                     </div>
 
                     <i class="bi bi-arrow-down-up"></i>
 
                 </div>
+
 
                 <div class="filter-card-body">
 
@@ -538,6 +710,7 @@
                             Цена — сначала дешёвые
                         </option>
 
+
                         <option
                             value="price_desc"
                             {% if sort_option == 'price_desc' %}selected{% endif %}
@@ -545,12 +718,14 @@
                             Цена — сначала дорогие
                         </option>
 
+
                         <option
                             value="name_asc"
                             {% if sort_option == 'name_asc' %}selected{% endif %}
                         >
                             Название — А → Я
                         </option>
+
 
                         <option
                             value="name_desc"
@@ -572,9 +747,9 @@
 </form>
 
 
-<!-- =========================
-     MODAL ПОКУПКИ
-========================= -->
+<!-- =========================================================
+     BUY MODAL
+========================================================= -->
 
 <div
     class="modal fade"
@@ -588,14 +763,26 @@
 
         <div class="modal-content">
 
+
+            <!-- HEADER -->
+
             <div class="modal-header">
 
                 <div>
-                    <span class="modal-eyebrow">ЗАКАЗ</span>
-                    <h5 class="modal-title" id="buyModalLabel">
+
+                    <span class="modal-eyebrow">
+                        ЗАКАЗ
+                    </span>
+
+                    <h5
+                        class="modal-title"
+                        id="buyModalLabel"
+                    >
                         Оформление покупки
                     </h5>
+
                 </div>
+
 
                 <button
                     type="button"
@@ -607,7 +794,12 @@
             </div>
 
 
+            <!-- BODY -->
+
             <div class="modal-body">
+
+
+                <!-- PRODUCT -->
 
                 <div class="modal-product">
 
@@ -630,13 +822,19 @@
                 </div>
 
 
+                <!-- PAYMENT -->
+
                 <div class="payment-section">
 
                     <span class="payment-title">
                         Способ оплаты
                     </span>
 
+
                     <div class="payment-methods">
+
+
+                        <!-- CARD -->
 
                         <label class="payment-method">
 
@@ -650,12 +848,17 @@
                             >
 
                             <span>
+
                                 <i class="bi bi-credit-card"></i>
+
                                 Банковская карта
+
                             </span>
 
                         </label>
 
+
+                        <!-- SBP -->
 
                         <label class="payment-method">
 
@@ -668,8 +871,11 @@
                             >
 
                             <span>
+
                                 <i class="bi bi-qr-code"></i>
+
                                 СБП
+
                             </span>
 
                         </label>
@@ -678,6 +884,8 @@
 
                 </div>
 
+
+                <!-- CARD FIELDS -->
 
                 <div id="cardFields">
 
@@ -695,6 +903,8 @@
                             class="form-control"
                             id="cardNumber"
                             placeholder="0000 0000 0000 0000"
+                            inputmode="numeric"
+                            autocomplete="cc-number"
                         >
 
                     </div>
@@ -716,6 +926,7 @@
                                 class="form-control"
                                 id="cardExpiry"
                                 placeholder="MM/YY"
+                                inputmode="numeric"
                             >
 
                         </div>
@@ -735,6 +946,8 @@
                                 class="form-control"
                                 id="cardCvv"
                                 placeholder="123"
+                                inputmode="numeric"
+                                autocomplete="cc-csc"
                             >
 
                         </div>
@@ -744,10 +957,12 @@
                 </div>
 
 
+                <!-- SBP -->
+
                 <div
                     id="sbpFields"
-                    style="display:none;"
                     class="sbp-fields"
+                    style="display:none;"
                 >
 
                     <p>
@@ -768,6 +983,8 @@
             </div>
 
 
+            <!-- FOOTER -->
+
             <div class="modal-footer">
 
                 <button
@@ -777,6 +994,7 @@
                 >
                     Отмена
                 </button>
+
 
                 <button
                     type="button"
@@ -797,326 +1015,611 @@
 {% endblock %}
 
 
+
 {% block scripts %}
 
 <script>
 
-/* =========================================
-   ПЕРСОНАЛЬНЫЕ РЕКОМЕНДАЦИИ
-========================================= */
+/* =========================================================
+   DOM
+========================================================= */
 
-function togglePersonalized(checkbox) {
+document.addEventListener('DOMContentLoaded', function () {
 
-    const url = new URL(window.location.href);
+    const form =
+        document.getElementById('filterForm');
 
-    if (checkbox.checked) {
+    const sort =
+        document.getElementById('sort');
 
-        url.searchParams.set('personalized', '1');
+    const mobileApply =
+        document.getElementById('mobileApplyFilters');
 
-        url.searchParams.delete('budget');
-        url.searchParams.delete('category');
+    const mobileReset =
+        document.getElementById('mobileResetFilters');
 
-        url.searchParams.set('sort', 'price_asc');
+    const mobileFilters =
+        document.getElementById('mobileFilters');
 
-    } else {
+    const personalToggle =
+        document.getElementById('personalToggle');
 
-        url.searchParams.delete('personalized');
 
-    }
 
-    window.location.href = url.toString();
+    /* =====================================================
+       PERSONALIZED
+    ===================================================== */
 
-}
+    if (personalToggle) {
 
+        personalToggle.addEventListener(
+            'change',
+            function () {
 
-/* =========================================
-   DESKTOP ФИЛЬТРЫ
-========================================= */
+                const url =
+                    new URL(window.location.href);
 
-document
-    .querySelectorAll('.category-checkbox')
-    .forEach(cb => {
 
-        cb.addEventListener('change', () => {
+                if (this.checked) {
 
-            document
-                .getElementById('filterForm')
-                .submit();
-
-        });
-
-    });
-
-
-document
-    .getElementById('sort')
-    .addEventListener('change', function () {
-
-        document
-            .getElementById('filterForm')
-            .submit();
-
-    });
-
-
-/* =========================================
-   МОБИЛЬНЫЕ ФИЛЬТРЫ
-========================================= */
-
-document
-    .getElementById('mobileApplyFilters')
-    .addEventListener('click', function () {
-
-        const form = document.getElementById('filterForm');
-
-        /*
-         * Удаляем старые категории.
-         */
-
-        form
-            .querySelectorAll('input[name="category"]')
-            .forEach(input => input.remove());
-
-
-        /*
-         * Добавляем выбранные мобильные категории.
-         */
-
-        document
-            .querySelectorAll('.category-checkbox-mobile:checked')
-            .forEach(input => {
-
-                const hidden = document.createElement('input');
-
-                hidden.type = 'hidden';
-                hidden.name = 'category';
-                hidden.value = input.dataset.category;
-
-                form.appendChild(hidden);
-
-            });
-
-
-        /*
-         * Мобильная сортировка.
-         */
-
-        const mobileSort = document.querySelector(
-            'input[name="mobile_sort"]:checked'
-        );
-
-        if (mobileSort) {
-
-            document.getElementById('sort').value =
-                mobileSort.value;
-
-        }
-
-
-        /*
-         * Закрываем меню.
-         */
-
-        const offcanvasElement =
-            document.getElementById('mobileFilters');
-
-        const offcanvas =
-            bootstrap.Offcanvas.getInstance(offcanvasElement);
-
-        if (offcanvas) {
-            offcanvas.hide();
-        }
-
-
-        /*
-         * Отправляем форму.
-         */
-
-        form.submit();
-
-    });
-
-
-/* =========================================
-   СБРОС МОБИЛЬНЫХ ФИЛЬТРОВ
-========================================= */
-
-document
-    .getElementById('mobileResetFilters')
-    .addEventListener('click', function () {
-
-        document
-            .querySelectorAll('.category-checkbox-mobile')
-            .forEach(input => {
-                input.checked = false;
-            });
-
-
-        document.querySelector(
-            'input[name="mobile_sort"][value="price_asc"]'
-        ).checked = true;
-
-    });
-
-
-/* =========================================
-   ОПЛАТА
-========================================= */
-
-document
-    .querySelectorAll('input[name="paymentMethod"]')
-    .forEach(radio => {
-
-        radio.addEventListener('change', function () {
-
-            document.getElementById('cardFields').style.display =
-                this.value === 'card'
-                    ? 'block'
-                    : 'none';
-
-            document.getElementById('sbpFields').style.display =
-                this.value === 'sbp'
-                    ? 'block'
-                    : 'none';
-
-        });
-
-    });
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-const buyModal =
-    document.getElementById('buyModal');
-
-
-buyModal.addEventListener(
-    'show.bs.modal',
-    function (event) {
-
-        const button =
-            event.relatedTarget;
-
-        buyModal._relatedTarget =
-            button;
-
-
-        document.getElementById(
-            'modalProductName'
-        ).textContent =
-            button.getAttribute('data-product');
-
-
-        document.getElementById(
-            'modalProductPrice'
-        ).textContent =
-            button.getAttribute('data-price') + ' ₽';
-
-
-        document.getElementById(
-            'modalProductImage'
-        ).src =
-            button.getAttribute('data-image');
-
-
-        document.getElementById(
-            'modalProductCategory'
-        ).textContent =
-            button.getAttribute('data-category');
-
-
-        document.getElementById(
-            'paymentCard'
-        ).checked = true;
-
-
-        document.getElementById(
-            'cardFields'
-        ).style.display = 'block';
-
-
-        document.getElementById(
-            'sbpFields'
-        ).style.display = 'none';
-
-
-        document.getElementById(
-            'cardNumber'
-        ).value = '';
-
-
-        document.getElementById(
-            'cardExpiry'
-        ).value = '';
-
-
-        document.getElementById(
-            'cardCvv'
-        ).value = '';
-
-    }
-);
-
-
-/* =========================================
-   BUY
-========================================= */
-
-document
-    .getElementById('payButton')
-    .addEventListener('click', function () {
-
-        const button =
-            buyModal._relatedTarget;
-
-        if (!button) return;
-
-        const productId =
-            button.getAttribute('data-product-id');
-
-
-        fetch(`/buy/${productId}`, {
-            method: 'POST'
-        })
-
-        .then(response => response.json())
-
-        .then(data => {
-
-            if (data.success) {
-
-                alert(
-                    'Заказ оформлен! Спасибо за покупку.'
-                );
-
-                const modal =
-                    bootstrap.Modal.getInstance(
-                        buyModal
+                    url.searchParams.set(
+                        'personalized',
+                        '1'
                     );
 
-                modal.hide();
+                    url.searchParams.delete(
+                        'budget'
+                    );
 
-            } else {
+                    url.searchParams.delete(
+                        'category'
+                    );
 
-                alert(
-                    'Ошибка: ' + data.message
-                );
+                    url.searchParams.set(
+                        'sort',
+                        'price_asc'
+                    );
+
+                } else {
+
+                    url.searchParams.delete(
+                        'personalized'
+                    );
+
+                }
+
+
+                window.location.href =
+                    url.toString();
 
             }
+        );
 
-        })
+    }
 
-        .catch(() => {
 
-            alert(
-                'Ошибка соединения'
+
+    /* =====================================================
+       DESKTOP CATEGORIES
+    ===================================================== */
+
+    document
+        .querySelectorAll('.category-checkbox')
+        .forEach(function (checkbox) {
+
+            checkbox.addEventListener(
+                'change',
+                function () {
+
+                    form.submit();
+
+                }
             );
 
         });
 
-    });
+
+
+    /* =====================================================
+       DESKTOP SORT
+    ===================================================== */
+
+    if (sort) {
+
+        sort.addEventListener(
+            'change',
+            function () {
+
+                form.submit();
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       MOBILE CATEGORY COUNT
+    ===================================================== */
+
+    function updateMobileCategoryCount() {
+
+        const checked =
+            document.querySelectorAll(
+                '.category-checkbox-mobile:checked'
+            ).length;
+
+        const counter =
+            document.getElementById(
+                'mobileCategoryCount'
+            );
+
+        if (counter) {
+
+            counter.textContent =
+                checked;
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll('.category-checkbox-mobile')
+        .forEach(function (checkbox) {
+
+            checkbox.addEventListener(
+                'change',
+                updateMobileCategoryCount
+            );
+
+        });
+
+
+
+    /* =====================================================
+       MOBILE APPLY
+    ===================================================== */
+
+    if (mobileApply) {
+
+        mobileApply.addEventListener(
+            'click',
+            function () {
+
+
+                /*
+                 * Удаляем старые скрытые категории,
+                 * которые могли остаться после предыдущего
+                 * применения.
+                 */
+
+                form
+                    .querySelectorAll(
+                        'input[data-mobile-generated="true"]'
+                    )
+                    .forEach(function (input) {
+
+                        input.remove();
+
+                    });
+
+
+                /*
+                 * Добавляем выбранные категории.
+                 */
+
+                document
+                    .querySelectorAll(
+                        '.category-checkbox-mobile:checked'
+                    )
+                    .forEach(function (checkbox) {
+
+                        const hidden =
+                            document.createElement(
+                                'input'
+                            );
+
+                        hidden.type =
+                            'hidden';
+
+                        hidden.name =
+                            'category';
+
+                        hidden.value =
+                            checkbox.dataset.category;
+
+                        hidden.dataset.mobileGenerated =
+                            'true';
+
+                        form.appendChild(
+                            hidden
+                        );
+
+                    });
+
+
+                /*
+                 * Передаём сортировку.
+                 */
+
+                const mobileSort =
+                    document.querySelector(
+                        'input[name="mobile_sort"]:checked'
+                    );
+
+
+                if (mobileSort && sort) {
+
+                    sort.value =
+                        mobileSort.value;
+
+                }
+
+
+                /*
+                 * Закрываем offcanvas.
+                 */
+
+                if (mobileFilters) {
+
+                    const instance =
+                        bootstrap.Offcanvas
+                            .getOrCreateInstance(
+                                mobileFilters
+                            );
+
+                    instance.hide();
+
+                }
+
+
+                /*
+                 * Отправляем форму.
+                 */
+
+                form.submit();
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       MOBILE RESET
+    ===================================================== */
+
+    if (mobileReset) {
+
+        mobileReset.addEventListener(
+            'click',
+            function () {
+
+
+                /*
+                 * Снимаем категории.
+                 */
+
+                document
+                    .querySelectorAll(
+                        '.category-checkbox-mobile'
+                    )
+                    .forEach(function (checkbox) {
+
+                        checkbox.checked =
+                            false;
+
+                    });
+
+
+                /*
+                 * Ставим сортировку по цене ↑.
+                 */
+
+                const defaultSort =
+                    document.querySelector(
+                        'input[name="mobile_sort"][value="price_asc"]'
+                    );
+
+
+                if (defaultSort) {
+
+                    defaultSort.checked =
+                        true;
+
+                }
+
+
+                updateMobileCategoryCount();
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       PAYMENT METHOD
+    ===================================================== */
+
+    const paymentRadios =
+        document.querySelectorAll(
+            'input[name="paymentMethod"]'
+        );
+
+    const cardFields =
+        document.getElementById(
+            'cardFields'
+        );
+
+    const sbpFields =
+        document.getElementById(
+            'sbpFields'
+        );
+
+
+    paymentRadios.forEach(
+        function (radio) {
+
+            radio.addEventListener(
+                'change',
+                function () {
+
+                    if (this.value === 'card') {
+
+                        cardFields.style.display =
+                            'block';
+
+                        sbpFields.style.display =
+                            'none';
+
+                    } else {
+
+                        cardFields.style.display =
+                            'none';
+
+                        sbpFields.style.display =
+                            'block';
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+
+    /* =====================================================
+       BUY MODAL
+    ===================================================== */
+
+    const buyModal =
+        document.getElementById(
+            'buyModal'
+        );
+
+
+    if (buyModal) {
+
+        buyModal.addEventListener(
+            'show.bs.modal',
+            function (event) {
+
+                const button =
+                    event.relatedTarget;
+
+
+                if (!button) {
+                    return;
+                }
+
+
+                buyModal._relatedTarget =
+                    button;
+
+
+                /*
+                 * Product name
+                 */
+
+                document.getElementById(
+                    'modalProductName'
+                ).textContent =
+                    button.getAttribute(
+                        'data-product'
+                    );
+
+
+                /*
+                 * Price
+                 */
+
+                document.getElementById(
+                    'modalProductPrice'
+                ).textContent =
+                    button.getAttribute(
+                        'data-price'
+                    ) + ' ₽';
+
+
+                /*
+                 * Image
+                 */
+
+                document.getElementById(
+                    'modalProductImage'
+                ).src =
+                    button.getAttribute(
+                        'data-image'
+                    );
+
+
+                /*
+                 * Category
+                 */
+
+                document.getElementById(
+                    'modalProductCategory'
+                ).textContent =
+                    button.getAttribute(
+                        'data-category'
+                    );
+
+
+                /*
+                 * Reset payment
+                 */
+
+                document.getElementById(
+                    'paymentCard'
+                ).checked =
+                    true;
+
+
+                cardFields.style.display =
+                    'block';
+
+                sbpFields.style.display =
+                    'none';
+
+
+                /*
+                 * Clear card fields
+                 */
+
+                document.getElementById(
+                    'cardNumber'
+                ).value = '';
+
+
+                document.getElementById(
+                    'cardExpiry'
+                ).value = '';
+
+
+                document.getElementById(
+                    'cardCvv'
+                ).value = '';
+
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       BUY
+    ===================================================== */
+
+    const payButton =
+        document.getElementById(
+            'payButton'
+        );
+
+
+    if (payButton) {
+
+        payButton.addEventListener(
+            'click',
+            function () {
+
+                const button =
+                    buyModal._relatedTarget;
+
+
+                if (!button) {
+                    return;
+                }
+
+
+                const productId =
+                    button.getAttribute(
+                        'data-product-id'
+                    );
+
+
+                /*
+                 * Блокируем кнопку,
+                 * чтобы нельзя было отправить
+                 * несколько запросов подряд.
+                 */
+
+                payButton.disabled =
+                    true;
+
+
+                fetch(
+                    `/buy/${productId}`,
+                    {
+                        method: 'POST'
+                    }
+                )
+
+                .then(function (response) {
+
+                    return response.json();
+
+                })
+
+                .then(function (data) {
+
+                    if (data.success) {
+
+                        alert(
+                            'Заказ оформлен! Спасибо за покупку.'
+                        );
+
+
+                        const modal =
+                            bootstrap.Modal
+                                .getInstance(
+                                    buyModal
+                                );
+
+
+                        if (modal) {
+                            modal.hide();
+                        }
+
+                    } else {
+
+                        alert(
+                            'Ошибка: ' +
+                            data.message
+                        );
+
+                    }
+
+                })
+
+                .catch(function () {
+
+                    alert(
+                        'Ошибка соединения'
+                    );
+
+                })
+
+                .finally(function () {
+
+                    payButton.disabled =
+                        false;
+
+                });
+
+            }
+        );
+
+    }
+
+});
 
 </script>
 
